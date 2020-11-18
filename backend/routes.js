@@ -26,9 +26,13 @@ module.exports = function (app) {
     });
 
     // user recommendations
-    app.get('/recommendations/', function (req, res) {
+    app.get('/recommendations/:num?', function (req, res) {
         req_animes=req.body.animes;
         req_scores=req.body.scores;
+        req_num = req.params.num;
+        if(req_num==null){
+            req_num=10;
+        }
 
         if (req_animes == null || req_animes.length < 10) {
             res.status(500).send({"error":"Must provide 10 animes"});
@@ -43,7 +47,7 @@ module.exports = function (app) {
         // console.log(req.session.animes);
         console.log("recieved " + req_animes.length + " " + req_scores.length);
 
-        predict(req_animes, req_scores).then((x) => {
+        predict(req_animes, req_scores, req_num).then((x) => {
             res.json({
                 "recommendations": x.map((i) => {
                     return getAnimeMin(i);

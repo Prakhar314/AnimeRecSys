@@ -39,14 +39,14 @@ async function reset_weights() {
     console.log("reset");
 }
 
-async function predict(ids,scores) {
+async function predict(ids,scores,num) {
     reset_weights();
     
     var anime_inputs_array = ids.map((i)=>{ return animes_id_i[i]; });
     var anime_inputs = tf.tensor(anime_inputs_array);
     var user_inputs = tf.tensor(Array.from({length: ids.length}, (v, i) => 0));
     var user_scores = tf.tensor(scores);
-    await model.fit([anime_inputs,user_inputs],user_scores, {epochs:1250,verbose:0});
+    await model.fit([anime_inputs,user_inputs],user_scores, {epochs:1000,verbose:0});
     console.log(await model.evaluate([anime_inputs,user_inputs],user_scores, {verbose:0}).dataSync());
     console.log("trained");
 
@@ -60,7 +60,7 @@ async function predict(ids,scores) {
 
     var ans_sort = dsu(all_anime_inputs_array,ans);
     console.log("sorted");
-    return  ans_sort.slice(0,10).map((i)=>{
+    return  ans_sort.slice(0,num).map((i)=>{
         return animes_i_id[i]; 
     });
 }
