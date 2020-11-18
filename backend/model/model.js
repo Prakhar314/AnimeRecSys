@@ -46,12 +46,13 @@ async function predict(ids,scores) {
     var anime_inputs = tf.tensor(anime_inputs_array);
     var user_inputs = tf.tensor(Array.from({length: ids.length}, (v, i) => 0));
     var user_scores = tf.tensor(scores);
-    await model.fit([anime_inputs,user_inputs],user_scores, {epochs:2000,verbose:0});
+    await model.fit([anime_inputs,user_inputs],user_scores, {epochs:1250,verbose:0});
+    console.log(await model.evaluate([anime_inputs,user_inputs],user_scores, {verbose:0}).dataSync());
     console.log("trained");
 
     var all_anime_inputs_array = Array.from({length: 4036}, (v, i) => i);
     all_anime_inputs_array = all_anime_inputs_array.filter(x => !anime_inputs_array.includes(x) );
-    console.log(all_anime_inputs_array.length);
+    // console.log(all_anime_inputs_array.length);
     var all_anime_inputs = tf.tensor(all_anime_inputs_array);
     user_inputs = tf.tensor(Array.from({length: all_anime_inputs_array.length}, (v, i) => 0));
     var ans = await Array.from(model.predict([all_anime_inputs,user_inputs]).dataSync());

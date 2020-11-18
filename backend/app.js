@@ -1,34 +1,37 @@
 var express = require('express');
-var { animes, animes_cs } = require('./data/anime_data.js');
-var { model, reset_weights, predict } = require('./model/model.js');
+
 var app = express();
+
 app.use(express.json());
-// anime details and recommendations
-app.get('/anime/:id/:num?', function (req, res) {
-    var num = parseInt(req.params.num, 10);
-    if(!num){
-        num=10;
-    }
-    res.json({
-        "details": {"id":req.params.id,...animes[req.params.id]},
-        "recommendations": animes_cs[req.params.id].slice(1, num+1).map((i) => {
-            return {"id":i,...animes[i]};
-        })
-    });
-});
 
-app.get('/', function (req, res) {
-    res.send(animes['20']);
-});
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
 
-// user recommendations
-app.post('/recommendations/', function (req, res) {
-    console.log("recieved " + req.body.anime.length + " " + req.body.scores.length);
-    predict(req.body.anime,req.body.scores).then((x)=>{
-        res.json({"recommendations":x.map((i)=>{
-            return {"id":i,...animes[i]};
-        })});
-        console.log("responded");
-    });
+var session = require('express-session');
+app.use(session({
+    secret: "Shh, its a secret!",
+    resave: false,
+    cookie: {
+        path: '/',
+        maxAge: 24 * 3600 * 1000
+    },
+    saveUninitialized: false
+}));
+
+const rateLimit = require("express-rate-limit");
+ 
+// Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+// see https://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', 1);
+ 
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 10
 });
+ 
+// only apply to requests that begin with /api/
+app.use("/recommendations/", apiLimiter);
+
+require('./routes')(app);
+
 app.listen(3000);
