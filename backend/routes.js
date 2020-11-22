@@ -1,5 +1,5 @@
 
-var { getAnime, getAnimeMin, getSimAnime } = require('./data/anime_data.js');
+var { getAnime, getAnimeMin, getSimAnime, searchAnime } = require('./data/anime_data.js');
 var { model, reset_weights, predict } = require('./model/model.js');
 
 let Queue = require('bull');
@@ -66,6 +66,10 @@ module.exports = function (app) {
             req.session.jobId = job.id;
             res.json({ id: job.id });
         });
+    });
+
+    app.get('/search/:q/:num?',(req,res)=>{
+        res.send(searchAnime(req.params.q,req.body.incgenre,req.body.excgenre,req.params.num||10));
     });
 
     // Allows the client to query the state of a background job
