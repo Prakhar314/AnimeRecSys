@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require("path");
 const tf = require('@tensorflow/tfjs');
+const { argSort } = require('../data/anime_data.js');
 require('@tensorflow/tfjs-node');
 
 let rawdata_i_id = fs.readFileSync(path.resolve(__dirname, "../data/anime_index_to_id.json"));
@@ -25,11 +26,6 @@ var model, initial_weights_3, initial_weights_11;
         console.error(error);
     }
 })();
-
-const dsu = (arr1, arr2) => arr1
-    .map((item, index) => [arr2[index], item]) // add the args to sort by
-    .sort(([arg1], [arg2]) => arg2 - arg1) // sort by the args
-    .map(([, item]) => item);
 
 async function reset_weights() {
     await model.layers[3].setWeights(initial_weights_3);
@@ -68,7 +64,7 @@ async function predict(job) {
     var ans = await Array.from(model.predict([all_anime_inputs, user_inputs]).dataSync());
     console.log("predicted");
 
-    var ans_sort = dsu(all_anime_inputs_array, ans);
+    var ans_sort = argSort(all_anime_inputs_array, ans);
     console.log("sorted");
     return {
         "data": ans_sort.slice(0, num).map((i) => {

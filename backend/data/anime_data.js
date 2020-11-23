@@ -7,6 +7,8 @@ let animes = JSON.parse(rawdata);
 let rawdata_sim = fs.readFileSync(path.resolve(__dirname, "final_cs.json"));
 let animes_sim = JSON.parse(rawdata_sim);
 
+let popularAnimes =Object.keys(animes).map((id)=>(({id,title,image_path,score})=>({id,title,image_path,score}))(animes[id]));
+popularAnimes =  popularAnimes.sort((x,y)=>y.score-x.score).slice(0,20);
 
 const nameSearch = new Fuse(Object.keys(animes).map((id) => {
     return (({title,title_english,genre})=>({id,title,title_english,genre}))(animes[id]);
@@ -64,7 +66,14 @@ function searchAnime(query, incGenre, excGenre, num) {
     return getAnimeMin(queryMatch.slice(0, num).map((x)=>x.id));
 }
 
+const dsu = (arr1, arr2) => arr1
+    .map((item, index) => [arr2[index], item]) // add the args to sort by
+    .sort(([arg1], [arg2]) => arg2 - arg1) // sort by the args
+    .map(([, item]) => item);
+
 exports.getAnime = getAnime;
 exports.getAnimeMin = getAnimeMin;
 exports.getSimAnime = getSimAnime;
+exports.popularAnimes = popularAnimes;
 exports.searchAnime = searchAnime;
+exports.argSort = dsu;

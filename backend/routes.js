@@ -1,5 +1,5 @@
 
-var { getAnime, getAnimeMin, getSimAnime, searchAnime } = require('./data/anime_data.js');
+var { getAnime, getAnimeMin, getSimAnime, searchAnime, popularAnimes } = require('./data/anime_data.js');
 var { model, reset_weights, predict } = require('./model/model.js');
 
 let Queue = require('bull');
@@ -33,7 +33,7 @@ module.exports = function (app) {
     });
 
     app.get('/', function (req, res) {
-        res.send(getAnime(req.params.id));
+        res.send(popularAnimes);
     });
 
     // user recommendations
@@ -77,8 +77,9 @@ module.exports = function (app) {
             num: req_num,
         });
         req.session.jobId = newJob.id;
+        let numWait = await workQueue.getWaitingCount();
         console.log("Added "+req.session.jobId);
-        res.json({ id: newJob.id });
+        res.json({ id: newJob.id ,numWait});
     });
 
     app.get('/search/:q/:num?',(req,res)=>{
