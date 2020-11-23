@@ -37,10 +37,24 @@ module.exports = function (app) {
     });
 
     // user recommendations
-    app.get('/recommendations/:num?', function (req, res) {
-        req_animes = req.body.animes;
-        req_scores = req.body.scores;
-        req_num = req.params.num;
+    app.get('/recommendations/:num?', async function (req, res) {
+        if(req.session.jobId!=null){
+            let job = await workQueue.getJob(req.session.jobId);
+            if(job!=null){
+                let state = await job.getState();
+                if(state=='completed'){
+                    console.log("Removed "+req.session.jobId);
+                    job.remove();
+                }
+                else{
+                    res.status(404).send({"error":"ACTIVE_JOB"});
+                    return;
+                }
+            }
+        }
+        let req_animes = req.body.animes;
+        let req_scores = req.body.scores;
+        let req_num = req.params.num;
         if (req_num == null) {
             req_num = 10;
         }
@@ -53,23 +67,22 @@ module.exports = function (app) {
             res.status(500).send({ "error": "Must provide same number of scores as number of anime" });
             return;
         }
-
         // req.session.animes = {'animes':req_animes,'scores':req_scores};
         // console.log(req.session.animes);
         console.log("recieved " + req_animes.length + " " + req_scores.length);
 
-        workQueue.add({
+        let newJob = await workQueue.add({
             ids: req_animes,
             scores: req_scores,
             num: req_num,
-        }).then((job) => {
-            req.session.jobId = job.id;
-            res.json({ id: job.id });
         });
+        req.session.jobId = newJob.id;
+        console.log("Added "+req.session.jobId);
+        res.json({ id: newJob.id });
     });
 
     app.get('/search/:q/:num?',(req,res)=>{
-        res.send(searchAnime(req.params.q,req.body.incgenre,req.body.excgenre,req.params.num||10));
+        res.send(searchAnime(req.params.q,req.body.incgenre,req.body.excgenre,req.params.num||5));
     });
 
     // Allows the client to query the state of a background job
@@ -86,8 +99,7 @@ module.exports = function (app) {
             let reason = job.failedReason;
             let result = job.returnvalue;
             if (state == 'completed') {
-                result = result.data.map((i) => getAnimeMin(i));
-                job.remove();
+                result = getAnimeMin(result.data);
             }
             res.json({ id, state, progress, reason, result });
         }
