@@ -4,15 +4,20 @@ import {
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
+import NavBar from "./NavBar";
 export default function AnimePage() {
     // We can use the `useParams` hook here to access
     // the dynamic pieces of the URL.
+    const defaultBanner = '/bannerPlaceholder.png';
+    const defaultCover = '/coverPlaceholder.png';
     let { id } = useParams();
     const [anime, setAnime] = useState({})
-    const [coverImage, setCoverImage] = useState('')
-    const [bannerImage, setBannerImage] = useState('')
+    const [coverImage, setCoverImage] = useState(defaultCover)
+    const [bannerImage, setBannerImage] = useState(defaultBanner)
 
     useEffect(() => {
+        setBannerImage(defaultBanner);
+        setCoverImage(defaultCover);
         axios.get(`https://animerecsys.glitch.me/anime/${id}`).then((val) => {
             // console.log(val.data.details);
             setAnime(val.data);
@@ -41,11 +46,14 @@ export default function AnimePage() {
     }, [id])
     return (
         <>
+            <NavBar/>
             {anime.details &&
                 <div>
                     <h3>{anime.details.title}</h3>
                     <img src={bannerImage} alt={anime.details.title} style={{ height: "min(500px,60vw)", width: "100%", objectFit: "cover" }}></img>
-                    <img src={coverImage} alt={anime.details.title} style={{marginTop: "-120px", boxShadow: "0px 0px 68px -19px black"}}></img>
+                    <div style={{display:"flex"}}>
+                    <img className="ml-md-5 mx-auto" src={coverImage} alt={anime.details.title} style={{marginTop: "-120px", boxShadow: "0px 0px 68px -19px black"}}></img>
+                    </div>
                     <p>{anime.details.mpaa_rating}</p>
                     <p>{anime.details.title_japanese}, {anime.details.title_english}</p>
                     <p>{anime.details.genre}</p>

@@ -1,8 +1,16 @@
 var express = require('express');
+var cors = require('cors');
 
 var app = express();
 
 app.use(express.json());
+
+var corsOptions = {
+  origin: 'https://3000-ee5b1d4b-8ad5-42be-bb48-383cfcbc1baa.ws-us02.gitpod.io',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
+
+app.use(cors(corsOptions));
 
 var cookieParser = require('cookie-parser');
 app.use(cookieParser());
@@ -34,4 +42,4 @@ app.use("/recommendations/", apiLimiter);
 
 require('./routes')(app);
 
-app.listen(3000);
+app.listen(5000);
