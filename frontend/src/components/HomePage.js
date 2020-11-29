@@ -1,49 +1,45 @@
-import { React, useEffect, useState } from 'react'
-import logo from '../logo.svg';
-import { Link } from 'react-router-dom'
-import { Row, Col, Container } from 'react-bootstrap'
-import AnimeCard from './AnimeCard'
+import { React, useEffect, useState, useCallback } from 'react'
+import { Container, Jumbotron, Row } from 'react-bootstrap'
 import axios from 'axios'
+import AnimeGrid from './AnimeGrid';
+import LoadingShar from './LoadingShar';
+import NavBar from './NavBar';
 
 function HomePage() {
     const [anime, setAnime] = useState([])
-
-    function pingServer() {
-        axios.get('https://animerecsys.glitch.me/', { timeout: 5000 }).then((res) => {
-            // console.log(res.data)
-            setAnime(res.data)
-        }).catch(err => {
-            console.log(err.code)
-            if (err.message.includes('timeout')) {
-                setTimeout(pingServer, 1000)
-            }
-        })
-    }
+    const pingServer = useCallback(
+        () => {
+            axios.get('https://animerecsys.glitch.me/', { timeout: 5000 }).then((res) => {
+                // console.log(res.data)
+                setAnime(res.data)
+            }).catch(err => {
+                console.log(err.code)
+                if (err.message.includes('timeout')) {
+                    setTimeout(pingServer, 1000)
+                }
+            })
+        },
+        [],
+    )
 
     useEffect(() => {
         pingServer()
-    }, [])
+    }, [pingServer])
     return (
-        <div>
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <li>
-                    <Link to="/anime/20">Yahoo</Link>
-                </li>
-                <Container>
-                    <Row style={{ flexWrap: "wrap", paddingLeft: "10px", paddingRight: "10px" }}>
-                        {anime.map((a) => (
-                            <Col key={a.id} xs={4} md={3} lg={2} style={{ paddingLeft: "10px", paddingRight: "10px" }}>
-                                <AnimeCard id={a.id} title={a.title} image={a.image_path} />
-                            </Col>
-                        ))}
-                    </Row>
-                </Container>
-            </header>
-        </div>
+        <>
+            <NavBar />
+            {anime.length === 0 && <LoadingShar height={100} />}
+            <Jumbotron style={{minHeight:"40vh"}}>
+                <Row>
+
+                </Row>
+                    <input type="text"></input>
+            </Jumbotron>
+            <Container>
+                <h3>Popular Shows</h3>
+            </Container>
+            <AnimeGrid anime={anime} />
+        </>
     )
 }
 

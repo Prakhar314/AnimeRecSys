@@ -2,9 +2,13 @@ import {
     useParams
 } from "react-router-dom";
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
 import axios from 'axios'
 import NavBar from "./NavBar";
+import { Col, Row, Container } from 'react-bootstrap'
+import AnimeGrid from "./AnimeGrid"
+import AnimeInfo from "./AnimeInfo"
+import LoadingShar from "./LoadingShar"
+import Chip from "./Chip"
 export default function AnimePage() {
     // We can use the `useParams` hook here to access
     // the dynamic pieces of the URL.
@@ -14,6 +18,13 @@ export default function AnimePage() {
     const [anime, setAnime] = useState({})
     const [coverImage, setCoverImage] = useState(defaultCover)
     const [bannerImage, setBannerImage] = useState(defaultBanner)
+    const [width, setWidth] = React.useState(window.innerWidth)
+
+    React.useEffect(() => {
+        const handleWindowResize = () => setWidth(window.innerWidth)
+        window.addEventListener("resize", handleWindowResize)
+        return () => window.removeEventListener("resize", handleWindowResize)
+    }, [])
 
     useEffect(() => {
         setBannerImage(defaultBanner);
@@ -46,27 +57,34 @@ export default function AnimePage() {
     }, [id])
     return (
         <>
-            <NavBar/>
+            <NavBar />
             {anime.details &&
                 <div>
-                    <h3>{anime.details.title}</h3>
                     <img src={bannerImage} alt={anime.details.title} style={{ height: "min(500px,60vw)", width: "100%", objectFit: "cover" }}></img>
-                    <div style={{display:"flex"}}>
-                    <img className="ml-md-5 mx-auto" src={coverImage} alt={anime.details.title} style={{marginTop: "-120px", boxShadow: "0px 0px 68px -19px black"}}></img>
-                    </div>
-                    <p>{anime.details.mpaa_rating}</p>
-                    <p>{anime.details.title_japanese}, {anime.details.title_english}</p>
-                    <p>{anime.details.genre}</p>
-                    <p>{anime.details.synopsis}</p>
-                    <ul>
-                        {anime.recommendations.map((x) => {
-                            return (<li key={x.id}><Link to={"/anime/" + x.id}>{x.title}</Link></li>);
-                        })}
-                    </ul>
+                    <Container>
+                        <Row>
+                            <Col xs={12} md={4} style={{paddingRight:"0px",textAlign:width > 768 ?"left":"center"}}>
+                                <div style={{ display: "flex" }}>
+                                    <img src={coverImage} alt={anime.details.title} style={{ marginTop: "-120px", boxShadow: "0px 0px 68px -19px black", marginLeft: width > 768 ? "unset" : "auto", marginRight: width > 768 ? "unset" : "auto" }}></img>
+                                </div>
+                                <h5 style={{ color: "rgb(108, 117, 125)", fontWeight: "300",marginTop: "2rem" }}>{anime.details.title_japanese}, {anime.details.title_english}</h5>
+                                <AnimeInfo {...anime.details}/>
+                            </Col>
+                            <Col xs={12} md={8} style={{marginLeft:"15px",marginRight:"-15px"}}>
+                                <h2 style={{ marginTop: "2rem", marginBottom: "1rem", textAlign: width > 768 ? "left" : "center" }}>{anime.details.title}</h2>
+                                <p>{anime.details.synopsis}</p>
+                            </Col>
+                        </Row>
+                    </Container>
+                    {/* <Container>
+                        <h3 style={{ marginTop: "2rem", marginBottom: "1rem", textAlign: width > 768 ? "left" : "center" }}>Synopsis</h3>
+                        <p>{anime.details.synopsis}</p>
+                    </Container> */}
+                    <AnimeGrid anime={anime.recommendations}>
+                        <h3 style={{ marginTop: "2rem", marginBottom: "1rem", textAlign: width > 768 ? "left" : "center" }}>Recommendations</h3>
+                    </AnimeGrid>
                 </div>}
-            {anime.details == null && <div>
-                <h3>Loading</h3>
-            </div>}
+            {anime.details == null && <LoadingShar />}
         </>
     );
 }

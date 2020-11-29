@@ -3,7 +3,7 @@ import { Card } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 
 function AnimeCard({ id, title, image }) {
-    console.log(id)
+    // console.log(id)
     return (
         <Card style={{ border:"none"}}>
             <Link style={{ textDecoration: "none" }} to = {`/anime/${id}`}>

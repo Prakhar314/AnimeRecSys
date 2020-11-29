@@ -38,7 +38,7 @@
 }
 
 .card-img-top:hover{
-    box-shadow: 0px 0px 30px -10px black;
+    box-shadow: 0px 0px 25px -10px black;
     transform:scale(1.01);
 }
 .card-img-top{
