@@ -51,8 +51,8 @@ export default function AnimePage() {
             query,
             variables
         }).then((result) => {
-            setBannerImage(result.data.data.Media.bannerImage);
-            setCoverImage(result.data.data.Media.coverImage.large);
+            setBannerImage(result.data.data.Media.bannerImage||defaultBanner);
+            setCoverImage(result.data.data.Media.coverImage.large||defaultCover);
         });
     }, [id])
     return (

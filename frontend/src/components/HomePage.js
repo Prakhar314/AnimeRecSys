@@ -3,6 +3,7 @@ import { Container, Jumbotron, Row } from 'react-bootstrap'
 import axios from 'axios'
 import AnimeGrid from './AnimeGrid';
 import LoadingShar from './LoadingShar';
+import SearchSection from './SearchSection';
 import NavBar from './NavBar';
 
 function HomePage() {
@@ -29,12 +30,7 @@ function HomePage() {
         <>
             <NavBar />
             {anime.length === 0 && <LoadingShar height={100} />}
-            <Jumbotron style={{minHeight:"40vh"}}>
-                <Row>
-
-                </Row>
-                    <input type="text"></input>
-            </Jumbotron>
+            <SearchSection/>
             <Container>
                 <h3>Popular Shows</h3>
             </Container>

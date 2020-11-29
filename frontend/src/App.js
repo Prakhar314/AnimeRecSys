@@ -10,7 +10,7 @@ import AnimePage from "./components/AnimePage";
 function App() {
     return (
         <div className="App">
-            <Router>
+            <Router >
                 <Switch>
                     <Route path="/anime/:id" children={<AnimePage />} />
                     <Route path="/" children={<HomePage />} />
