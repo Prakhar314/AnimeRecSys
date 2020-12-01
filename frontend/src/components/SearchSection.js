@@ -1,91 +1,101 @@
-import React from 'react'
-import Autosuggest from "react-autosuggest";
+import { React, useState, useCallback, useRef, useEffect } from 'react'
 import debounce from 'lodash.debounce'
 import axios from 'axios'
-import { Jumbotron, Container, Spinner } from 'react-bootstrap';
-import { Link ,withRouter} from 'react-router-dom';
+import { Jumbotron, Container, Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
+import tags from './tags'
+import ColoredSwitch from './ColoredSwitch';
 
-function getSuggestionValue(suggestion) {
-    return suggestion.id;
-}
-
-function renderSuggestion(suggestion) {
-    return (
-        <Link to={"/anime/" + suggestion.id}>{suggestion.title}</Link>
-    );
-}
-
-class SearchSection extends React.Component {
-    constructor() {
-        super();
-
-        this.state = {
-            value: '',
-            suggestions: [],
-            isLoading: false
-        };
-        this.debouncedLoadSuggestions = debounce(this.loadSuggestions, 1000); // 1000ms is chosen for demo purposes only.
-    }
-
-    loadSuggestions(value) {
-        this.setState({
-            isLoading: true
-        });
-
-        axios.get(`https://animerecsys.glitch.me/search/${value}`).then((res) => {
-            if (value === this.state.value) {
-                this.setState({
-                    isLoading: false,
-                    suggestions: res.data
-                });
+export default function SearchSection({ onSuggest }) {
+    const [loading, setLoading] = useState(false)
+    const [incTags, setIncTags] = useState([])
+    const [excTags, setExcTags] = useState([])
+    const [value, setValue] = useState('')
+    const valueRef = useRef(value)
+    useEffect(() => {
+        valueRef.current = value
+    }, [value])
+    const loadSuggestions = (query) => {
+        console.log("fetching " + query)
+        console.log(incTags)
+        console.log(excTags)
+        setLoading(true)
+        axios({
+            method: 'post',
+            url: `https://animerecsys.glitch.me/search/${query}/10`,
+            data: {
+                "incgenre": incTags,
+                "excgenre": excTags
+            },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then((res) => {
+            console.log("fetching " + query + " " + valueRef.current)
+            if (query === valueRef.current) {
+                setLoading(false)
+                onSuggest(res.data)
+                // console.log(res.data)
             } else { // Ignore suggestions if input value changed
-                this.setState({
-                    isLoading: false
-                });
+                setLoading(true)
             }
         })
     }
 
-    onChange = (event, { newValue }) => {
-        this.setState({
-            value: newValue
-        });
+    const onChange = (event) => {
+        setValue(event.target.value)
+        fetchSuggestions(event.target.value)
     };
 
-    onSuggestionsFetchRequested = ({ value }) => {
-        this.debouncedLoadSuggestions(value);
-    };
-
-    onSuggestionsClearRequested = () => {
-        this.setState({
-            suggestions: []
-        });
-    };
-
-    render() {
-        const { value, suggestions, isLoading } = this.state;
-        const inputProps = {
-            placeholder: "Search..",
-            value,
-            onChange: this.onChange
-        };
-
-        return (
-            <Jumbotron style={{ minHeight: "40vh" }}>
-                <Container style={{display:"flex",alignItems:"center"}}>
-                    <Autosuggest
-                        suggestions={suggestions}
-                        onSuggestionSelected = {(event, { suggestionValue})=> {this.props.history.push(`/anime/${suggestionValue}`)}}
-                        onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                        onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                        getSuggestionValue={getSuggestionValue}
-                        renderSuggestion={renderSuggestion}
-                        inputProps={inputProps} />
-                    {isLoading&&<Spinner style={{marginLeft:"1rem"}}animation="grow"/>}
-                </Container>
-            </Jumbotron>
-        );
+    const changeTags = (i, k) => {
+        console.log(incTags)
+        if (k === 0) {
+            const list = excTags.filter((item) => item !== tags[i])
+            setExcTags(list)
+        }
+        if (k === 2) {
+            const list = incTags.filter((item) => item !== tags[i])
+            setIncTags(list)
+        }
+        if (k === 1) {
+            setIncTags([...incTags, tags[i]])
+        }
+        if (k === 3) {
+            setExcTags([...excTags, tags[i]])
+        }
     }
+
+    const fetchSuggestions = (value) => {
+        debouncedLoadSuggestions(value);
+    };
+
+    const debouncedLoadSuggestions = useCallback(debounce(loadSuggestions, 1000), [excTags, incTags]);
+
+    return (
+
+        <Jumbotron style={{ minHeight: "40vh" }}>
+            <Container style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
+                <InputGroup size="lg" style={{ maxWidth: "400px" }}>
+                    <InputGroup.Prepend>
+                        <InputGroup.Text id="basic-addon3">
+                            Search
+                        </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <FormControl
+                        placeholder="Jojo"
+                        aria-label="Search..."
+                        aria-describedby="basic-addon2"
+                        onChange={onChange}
+                        value={value}
+                    />
+                </InputGroup>
+                {loading && <Spinner style={{ marginLeft: "1rem" }} animation="grow" />}
+            </Container>
+            <Container style={{ width: "80%", display: "block", textAlign: "center" }}>
+                <h5 style={{ fontWeight: 700, color: "grey", marginTop: "1rem" }}>Tags</h5>
+                {tags.map((item, i) => <ColoredSwitch text={item} key={i} onTap={(k) => changeTags(i, k)} />)}
+            </Container>
+
+        </Jumbotron>
+    )
 }
 
-export default withRouter(SearchSection)
