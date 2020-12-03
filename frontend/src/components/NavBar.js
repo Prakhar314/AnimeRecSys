@@ -8,10 +8,10 @@ function NavBar() {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="ml-auto">
-                        <Link className="nav-link" to="/" >
+                        <Link className="nav-link" to="/browse" >
                         Browse
                         </Link>
-                        <Link className="nav-link" to="/rec" >
+                        <Link className="nav-link" to="/recommend" >
                         Recommendations
                         </Link>
                 </Nav>

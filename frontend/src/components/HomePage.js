@@ -1,43 +1,19 @@
-import { React, useEffect, useState, useCallback } from 'react'
-import { Container} from 'react-bootstrap'
-import axios from 'axios'
-import AnimeGrid from './AnimeGrid';
-import LoadingShar from './LoadingShar';
-import SearchSection from './SearchSection';
-import NavBar from './NavBar';
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 function HomePage() {
-    const [anime, setAnime] = useState([])
-    const [suggestions, setSuggestions] = useState([])
-    const pingServer = useCallback(
-        () => {
-            axios.get('https://animerecsys.glitch.me/', { timeout: 5000 }).then((res) => {
-                // console.log(res.data)
-                setAnime(res.data)
-            }).catch(err => {
-                console.log(err.code)
-                if (err.message.includes('timeout')) {
-                    setTimeout(pingServer, 1000)
-                }
-            })
-        },
-        [],
-    )
-
-    useEffect(() => {
-        pingServer()
-    }, [pingServer])
     return (
-        <>
-            <NavBar />
-            {anime.length === 0 && <LoadingShar height={100} />}
-            <SearchSection onSuggest={(res)=>{setSuggestions(res)}}/>
-            <Container>
-                <h3 style={{marginBottom:"2rem"}}>{suggestions.length === 0?"Popular Shows":"Search Results"}</h3>
-            </Container>
-            {suggestions.length === 0 && <AnimeGrid anime={anime} />}
-            {suggestions.length !== 0 && <AnimeGrid anime={suggestions} />}
-        </>
+        <div position="relative">
+            <img src="/AttackOnJojo.gif" style={{ position: "absolute", zIndex: "-1", width: "100vw", height: "100vh", objectFit: "cover" }} />
+            <div className="brand" style={{ color: "lightgray", margin: "auto", position: "absolute", top: "35%", left: "50%", transform: "translate(-50%,-50%)", textAlign: "center" }}>
+                <h1 style={{ fontSize: "min(13vw,100px)" }}>AnimeRecSys</h1>
+                <p>There couldn't be a better name...</p>
+            </div>
+            <div style={{ position: "absolute", bottom: "2rem", left: "50%", transform: "translate(-50%,0)", display: "inline-block",textAlign:"center" }}>
+                <Link className="btn btn-outline-light" to="/browse" style={{ margin: "1rem" }}>Browse Animes</Link>
+                <Link className="btn btn-outline-light" to="/recommend" style={{ margin: "1rem" }}>Get Recommendations</Link>
+            </div>
+        </div>
     )
 }
 

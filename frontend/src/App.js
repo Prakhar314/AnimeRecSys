@@ -4,6 +4,7 @@ import {
     Switch,
     Route
 } from "react-router-dom";
+import BrowsePage from "./components/BrowsePage";
 import HomePage from "./components/HomePage";
 import AnimePage from "./components/AnimePage";
 import RecPage from "./components/RecPage";
@@ -14,7 +15,8 @@ function App() {
             <Router >
                 <Switch>
                     <Route path="/anime/:id" children={<AnimePage />} />
-                    <Route path="/rec" children={<RecPage />} />
+                    <Route path="/recommend" children={<RecPage />} />
+                    <Route path="/browse" children={<BrowsePage />} />
                     <Route path="/" children={<HomePage />} />
                 </Switch>
             </Router>
