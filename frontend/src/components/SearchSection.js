@@ -21,7 +21,7 @@ export default function SearchSection({ onSuggest }) {
         setLoading(true)
         axios({
             method: 'post',
-            url: `https://animerecsys.glitch.me/search/${query}/10`,
+            url: `https://animerecsys.glitch.me/search/${query}/18`,
             data: {
                 "incgenre": incTags,
                 "excgenre": excTags

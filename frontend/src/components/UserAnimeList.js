@@ -6,11 +6,11 @@ import OverlayedImage from './OverlayedImage'
 function UserAnimeList({ onAddAnime, onClearAnime, anime }) {
     const [selected, setSelected] = useState(0)
     return (
-        <Container fluid style={{ minHeight: "45vh", backgroundColor: "lightgrey", paddingTop: "1rem" }}>
-            <div style={{ display: "flex" }}>
-                <h3 style={{ marginLeft: "1rem", fontWeight:300 }}>
+        <div style={{ minHeight: "45vh", backgroundColor: "lightgrey", paddingTop: "1rem" }}>
+            <Container style={{ display: "flex" }}>
+                <h3 style={{ marginLeft: "1rem", fontWeight: 300 }}>
                     Your List({anime.length})
-                    </h3>
+                </h3>
                 <div style={{ marginLeft: "auto" }}>
                     <Button
                         variant="outline-dark"
@@ -25,27 +25,29 @@ function UserAnimeList({ onAddAnime, onClearAnime, anime }) {
                         Clear All
                     </Button>
                 </div>
-            </div>
-            <ScrollMenu
-                arrowLeft={<div style={{ fontSize: "30px" }}>{" < "}</div>}
-                arrowRight={<div style={{ fontSize: "30px" }}>{" > "}</div>}
-                // onFirstItemVisible={()=>{console.log("AAAAA")}}
-                arrowDisabledClass={"d-none"}
-                hideSingleArrow={true}
-                data={
-                    anime.map((a, i) => (
-                        <div key={i}
-                            className="menu-item"
-                            style={{ display: "grid", maxWidth: "21vh" }}>
-                            <OverlayedImage id={a.id} image={a.image_path} title={a.title} score={a.score} />
-                        </div>
-                    ))
+            </Container>
+            <Container>
+                <ScrollMenu
+                    arrowLeft={<div style={{ fontSize: "30px" }}>{" < "}</div>}
+                    arrowRight={<div style={{ fontSize: "30px" }}>{" > "}</div>}
+                    // onFirstItemVisible={()=>{console.log("AAAAA")}}
+                    arrowDisabledClass={"d-none"}
+                    hideSingleArrow={true}
+                    data={
+                        anime.map((a, i) => (
+                            <div key={i}
+                                className="menu-item"
+                                style={{ display: "grid", maxWidth: "21vh" }}>
+                                <OverlayedImage id={a.id} image={a.image_path} title={a.title} score={a.score} />
+                            </div>
+                        ))
 
-                }
-                selected={selected}
-                onSelect={(key) => setSelected(key)}
-            />
-        </Container>
+                    }
+                    selected={selected}
+                    onSelect={(key) => setSelected(key)}
+                />
+            </Container>
+        </div>
     )
 }
 

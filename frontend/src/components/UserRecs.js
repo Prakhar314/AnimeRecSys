@@ -59,7 +59,7 @@ function UserRecs({ anime }) {
         dispatch({ type: 'REQ_SENT', payload: {} })
         axios({
             method: 'post',
-            url: `https://animerecsys.glitch.me/recommendations/10`,
+            url: 'https://animerecsys.glitch.me/recommendations/18',
             data: {
                 "animes": [...anime.map((x) => x.id)],
                 "scores": [...anime.map((x) => x.score)]
@@ -103,21 +103,28 @@ function UserRecs({ anime }) {
             })
     }
 
-    return <div style={{ minHeight: "45vh", position: "relative" }}>
+    return <div style={{ minHeight: "45vh", position: "relative", paddingBottom: "3rem" }}>
         <div style={{ textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}>
             {state.loading && (state.progress > 0 ?
                 <ProgressBar now={state.progress} animated style={{ minWidth: "200px" }} /> :
                 <Spinner animation="grow" variant="danger" />)}
-            {state.loading && (state.queue > 0 && <h6 className="text-muted" style={{ marginTop: "1rem" }}>Wait Time...{state.queue * 30}s</h6>)}
-            {state.error && <h6 className="text-danger">{state.errorMessage}</h6>}
+            {state.loading && (state.queue > 0 &&
+                <h6 className="text-muted" style={{ marginTop: "1rem" }}>Wait Time...{state.queue * 30}s</h6>
+            )}
+            {state.error &&
+                <h6 className="text-danger">{state.errorMessage}</h6>
+            }
         </div>
-        {state.recommendations.length !== 0 && <AnimeGrid anime={state.recommendations} fluid>
-            <Container fluid>
-                <h3 style={{ marginBottom: "2rem", marginTop: "2rem" }}>{"Recommended"}</h3>
-            </Container></AnimeGrid>}
-        {!state.loading && <Button variant="outline-dark" onClick={getRecs} disabled={anime.length < 10} style={{ position: "absolute", right: "1rem", bottom: "1rem" }}>
-            {anime.length < 10 ? "Add " + (10 - anime.length) + " more" : "Get Recommendations"}
-        </Button>}
+        {state.recommendations.length !== 0 &&
+            <AnimeGrid anime={state.recommendations} style={{ margin: "3rem" }}>
+                <Container fluid>
+                    <h3 style={{ marginBottom: "2rem", marginTop: "2rem" }}>{"Recommended"}</h3>
+                </Container>
+            </AnimeGrid>}
+        {!state.loading &&
+            <Button variant="outline-dark" onClick={getRecs} disabled={anime.length < 10} style={{ position: "absolute", left: "50%", transform: "translate(-50%,0)" ,bottom:"1rem"}}>
+                {anime.length < 10 ? "Add " + (10 - anime.length) + " more" : "Get Recommendations"}
+            </Button>}
     </div>
 }
 
