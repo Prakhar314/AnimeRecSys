@@ -1,4 +1,5 @@
-export default ['Action',
+
+const tags =['Action',
  'Adventure',
  'Cars',
  'Comedy',
@@ -38,3 +39,4 @@ export default ['Action',
  'Supernatural',
  'Thriller',
  'Vampire']
+ export default tags

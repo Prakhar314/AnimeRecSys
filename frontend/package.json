@@ -9,9 +9,10 @@
     "axios": "^0.21.0",
     "lodash.debounce": "^4.0.8",
     "react": "^17.0.1",
-    "react-autosuggest": "^10.0.4",
     "react-bootstrap": "^1.4.0",
     "react-dom": "^17.0.1",
+    "react-horizontal-scrolling-menu": "^0.7.8",
+    "react-rating-stars-component": "^2.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4"

@@ -7,7 +7,7 @@ function AnimeCard({ id, title, image }) {
     return (
         <Card style={{ border: "none" }}>
             <Link style={{ textDecoration: "none" }} to={`/anime/${id}`}>
-                <Card.Img variant="top" src={image} style={{ objectFit: "fit", width: "100%", borderRadius: "10px" }} />
+                <Card.Img variant="top" src={image} style={{ objectFit: "cover", width: "100%", borderRadius: "5px" }} />
             </Link>
             <Card.Body style={{ padding: "10px", textAlign: "center", marginLeft: "-10%", marginRight: "-10%" }}>
                 <Card.Subtitle style={{

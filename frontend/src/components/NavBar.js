@@ -11,7 +11,7 @@ function NavBar() {
                         <Link className="nav-link" to="/" >
                         Browse
                         </Link>
-                        <Link className="nav-link" to="/anime/20" >
+                        <Link className="nav-link" to="/rec" >
                         Recommendations
                         </Link>
                 </Nav>

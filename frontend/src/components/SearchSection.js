@@ -1,7 +1,7 @@
 import { React, useState, useCallback, useRef, useEffect } from 'react'
 import debounce from 'lodash.debounce'
 import axios from 'axios'
-import { Jumbotron, Container, Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
+import { Jumbotron, Container, Spinner, InputGroup, FormControl } from 'react-bootstrap';
 import tags from './tags'
 import ColoredSwitch from './ColoredSwitch';
 

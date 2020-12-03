@@ -1,5 +1,5 @@
 import { React, useEffect, useState, useCallback } from 'react'
-import { Container, Jumbotron, Row } from 'react-bootstrap'
+import { Container} from 'react-bootstrap'
 import axios from 'axios'
 import AnimeGrid from './AnimeGrid';
 import LoadingShar from './LoadingShar';

@@ -15,7 +15,7 @@ function getColor(value) {
 
 function ColoredSwitch({ text, onTap }) {
     const [selected, setSelected] = useState(0)
-    function switchValue({ }) {
+    function switchValue() {
         let newVal = selected+1
         if (selected < 3) {
             setSelected(s => s + 1)
@@ -27,8 +27,8 @@ function ColoredSwitch({ text, onTap }) {
         onTap(newVal)
     }
     return (
-        <buton onClick={switchValue}>
-            <Chip color={getColor(selected)} text={text} /></buton>
+        <span onClick={switchValue}>
+            <Chip color={getColor(selected)} text={text} /></span>
     )
 }
 

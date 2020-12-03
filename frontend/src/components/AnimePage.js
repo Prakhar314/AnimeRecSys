@@ -8,7 +8,7 @@ import { Col, Row, Container } from 'react-bootstrap'
 import AnimeGrid from "./AnimeGrid"
 import AnimeInfo from "./AnimeInfo"
 import LoadingShar from "./LoadingShar"
-import Chip from "./Chip"
+
 export default function AnimePage() {
     // We can use the `useParams` hook here to access
     // the dynamic pieces of the URL.
