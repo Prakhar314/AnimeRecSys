@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/AnimeRecSys/static/css/main.05c7a2ba.chunk.css",
-    "main.js": "/AnimeRecSys/static/js/main.71db5cd8.chunk.js",
-    "main.js.map": "/AnimeRecSys/static/js/main.71db5cd8.chunk.js.map",
+    "main.js": "/AnimeRecSys/static/js/main.1ee3fc9c.chunk.js",
+    "main.js.map": "/AnimeRecSys/static/js/main.1ee3fc9c.chunk.js.map",
     "runtime-main.js": "/AnimeRecSys/static/js/runtime-main.74ea1a99.js",
     "runtime-main.js.map": "/AnimeRecSys/static/js/runtime-main.74ea1a99.js.map",
     "static/js/2.667ac92c.chunk.js": "/AnimeRecSys/static/js/2.667ac92c.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.74ea1a99.js",
     "static/js/2.667ac92c.chunk.js",
     "static/css/main.05c7a2ba.chunk.css",
-    "static/js/main.71db5cd8.chunk.js"
+    "static/js/main.1ee3fc9c.chunk.js"
   ]
 }
