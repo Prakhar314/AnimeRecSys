@@ -1,10 +1,21 @@
-import { React, useState, useCallback, useRef, useEffect } from 'react'
+import React, { useState, useCallback, useRef, useEffect, useContext } from 'react'
+
 import { Modal, Button, Row, Col, InputGroup, FormControl, Spinner } from 'react-bootstrap'
 import debounce from 'lodash.debounce'
 import axios from 'axios'
-import ReactStars from "react-rating-stars-component";
-import CenterDiv from '../CenterDiv';
-function AddAnimeModal({ show, handleClose, handleAdd }) {
+import ReactStars from "react-rating-stars-component"
+
+import { store, actionTypes } from '../store'
+import CenterDiv from './CenterDiv'
+
+function AddAnimeModal({ show, handleClose }) {
+
+    const { state: globalState, dispatch: globalDispatch } = useContext(store)
+
+    function handleAdd(item) {
+        globalDispatch({ type: actionTypes.ADD_ANIME, payload: {...item} })
+    }
+
     const [state, setState] = useState({
         loading: false,
         value: '',
@@ -61,6 +72,10 @@ function AddAnimeModal({ show, handleClose, handleAdd }) {
     }
 
     const debouncedLoadSuggestions = useCallback(debounce(loadSuggestions, 1000), [])
+
+    const searchInGlobal = globalState.userAnimeList.filter((i) => i.id === state.currentAnime.id)
+    const animeAlreadyRated = searchInGlobal.length !== 0 && (state.currentAnime.score == null || state.currentAnime.score === searchInGlobal[0].score)
+    
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -105,7 +120,7 @@ function AddAnimeModal({ show, handleClose, handleAdd }) {
                                     </h6>)
                             }
                             {
-                                !state.loading&&state.suggestion.length === 0 &&<CenterDiv><h6 style={{ fontWeight: 200 }}>Suggestions will show up here</h6></CenterDiv>
+                                !state.loading && state.suggestion.length === 0 && <CenterDiv><h6 style={{ fontWeight: 200 }}>Suggestions will show up here</h6></CenterDiv>
                             }
                         </div>
                     </Col>
@@ -132,10 +147,10 @@ function AddAnimeModal({ show, handleClose, handleAdd }) {
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="secondary" onClick={handleClose}>
-                    Cancel
+                    Close
                 </Button>
-                <Button variant="primary" onClick={() => handleAdd(state.currentAnime)} disabled={state.currentAnime.score == null}>
-                    Save Rating
+                <Button variant="primary" onClick={() => handleAdd(state.currentAnime)} disabled={state.currentAnime.score == null || animeAlreadyRated}>
+                    {animeAlreadyRated ? `Rated ${searchInGlobal[0].score}`:'Save Rating' }
                 </Button>
             </Modal.Footer>
         </Modal>

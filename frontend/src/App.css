@@ -77,3 +77,11 @@ a, :active, :hover{
 .brand{
     font-family: 'Quicksand', sans-serif;
 }
+.page-link{
+    color: #343a40!important;
+}
+.page-item.active .page-link{
+    background-color: #343a40!important;
+    border-color: #343a40!important;
+    color:#fff!important;
+}

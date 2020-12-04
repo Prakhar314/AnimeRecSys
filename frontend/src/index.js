@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import { StateProvider } from './store.js';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -12,7 +13,9 @@ ReactDOM.render(
   integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
   crossorigin="anonymous"
 />
+  <StateProvider>
     <App />
+  </StateProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

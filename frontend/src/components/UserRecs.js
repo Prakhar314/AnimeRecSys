@@ -1,6 +1,9 @@
-import { React, useReducer } from 'react'
+import { React, useReducer, useContext } from 'react'
+
 import { Container, Button, ProgressBar, Spinner } from 'react-bootstrap'
 import axios from 'axios'
+
+import { store, actionTypes } from '../store'
 import AnimeGrid from './AnimeGrid'
 
 const initialState = {
@@ -52,8 +55,10 @@ function reducer(state, action) {
     }
 }
 
-function UserRecs({ anime }) {
+function UserRecs() {
     const [state, dispatch] = useReducer(reducer, initialState)
+    const {state: globalState, dispatch: globalDispatch } = useContext(store)
+    const userAnimeList = globalState.userAnimeList
 
     function getRecs() {
         dispatch({ type: 'REQ_SENT', payload: {} })
@@ -61,8 +66,8 @@ function UserRecs({ anime }) {
             method: 'post',
             url: 'https://animerecsys.glitch.me/recommendations/18',
             data: {
-                "animes": [...anime.map((x) => x.id)],
-                "scores": [...anime.map((x) => x.score)]
+                "animes": [...userAnimeList.map((x) => x.id)],
+                "scores": [...userAnimeList.map((x) => x.score)]
             },
             headers: {
                 "Content-Type": "application/json"
@@ -70,6 +75,7 @@ function UserRecs({ anime }) {
             withCredentials: true,
         }).then((res) => {
             dispatch({ type: 'REQ_SENT', payload: res.data })
+            globalDispatch({type:actionTypes.SYNC})
             setTimeout(() => {
                 pingForProgress()
             }, 5000)
@@ -96,7 +102,7 @@ function UserRecs({ anime }) {
                     dispatch({ type: 'PROGRESS', payload: { progress: res.data.progress } })
                     setTimeout(() => {
                         pingForProgress()
-                    }, 2000);
+                    }, 5000);
                 }
             }).catch((err) => {
                 dispatch({ type: 'ERROR', payload: { error: err.response.data.error } })
@@ -122,8 +128,8 @@ function UserRecs({ anime }) {
                 </Container>
             </AnimeGrid>}
         {!state.loading &&
-            <Button variant="outline-dark" onClick={getRecs} disabled={anime.length < 10} style={{ position: "absolute", left: "50%", transform: "translate(-50%,0)" ,bottom:"1rem"}}>
-                {anime.length < 10 ? "Add " + (10 - anime.length) + " more" : "Get Recommendations"}
+            <Button variant="outline-dark" onClick={getRecs} disabled={userAnimeList.length < 10} style={{ position: "absolute", left: "50%", transform: "translate(-50%,0)", bottom: "1rem" }}>
+                {userAnimeList.length < 10 ? "Add " + (10 - userAnimeList.length) + " more" : "Get Recommendations"}
             </Button>}
     </div>
 }
