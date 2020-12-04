@@ -1,4 +1,4 @@
-import { React, useReducer, useContext } from 'react'
+import { React, useReducer, useContext, useEffect } from 'react'
 
 import { Container, Button, ProgressBar, Spinner } from 'react-bootstrap'
 import axios from 'axios'
@@ -26,12 +26,12 @@ function reducer(state, action) {
                 errorMessage: '',
                 progress: 0,
                 queue: action.payload.numWait || (-2) + 1
-            };
+            }
         case 'PROGRESS':
             return {
                 ...state,
                 progress: action.payload.progress
-            };
+            }
         case 'FINISH':
             return {
                 loading: false,
@@ -40,7 +40,7 @@ function reducer(state, action) {
                 errorMessage: '',
                 progress: 0,
                 queue: 0,
-            };
+            }
         case 'ERROR':
             return {
                 loading: false,
@@ -49,15 +49,15 @@ function reducer(state, action) {
                 errorMessage: action.payload.error,
                 progress: 0,
                 queue: 0
-            };
+            }
         default:
-            throw new Error();
+            return initialState
     }
 }
 
 function UserRecs() {
     const [state, dispatch] = useReducer(reducer, initialState)
-    const {state: globalState, dispatch: globalDispatch } = useContext(store)
+    const { state: globalState, dispatch: globalDispatch } = useContext(store)
     const userAnimeList = globalState.userAnimeList
 
     function getRecs() {
@@ -75,20 +75,23 @@ function UserRecs() {
             withCredentials: true,
         }).then((res) => {
             dispatch({ type: 'REQ_SENT', payload: res.data })
-            globalDispatch({type:actionTypes.SYNC})
+            globalDispatch({ type: actionTypes.SYNC })
             setTimeout(() => {
-                pingForProgress()
+                pingForProgress(0)
             }, 5000)
         }).catch((err) => {
             if (err.response.data.err === 'ACTIVE_JOB') {
-                pingForProgress()
+                pingForProgress(0)
                 return
             }
             dispatch({ type: 'ERROR', payload: { error: err.response.data.error } })
         })
     }
 
-    function pingForProgress() {
+    function pingForProgress(tries) {
+        if (tries > 30) {
+            dispatch({ type: 'ERROR', payload: { error: "Job didn't finish in time" } })
+        }
         axios.get('https://animerecsys.glitch.me/job/',
             { withCredentials: true }).then((res) => {
                 if (res.data.status === 'failed') {
@@ -101,7 +104,7 @@ function UserRecs() {
                 else {
                     dispatch({ type: 'PROGRESS', payload: { progress: res.data.progress } })
                     setTimeout(() => {
-                        pingForProgress()
+                        pingForProgress(tries + 1)
                     }, 5000);
                 }
             }).catch((err) => {
@@ -109,11 +112,37 @@ function UserRecs() {
             })
     }
 
+    useEffect(() => {
+        if (globalState.recsInSync) {
+            dispatch({ type: 'REQ_SENT', payload: {} })
+            axios.get('https://animerecsys.glitch.me/job/', {
+                withCredentials: true,
+            }).then((res) => {
+                if (res.data.status === 'failed') {
+                    dispatch({ type: 'reset' })
+                    return
+                }
+                if (res.data.result != null) {
+                    dispatch({ type: 'FINISH', payload: { result: res.data.result } })
+                }
+                else {
+                    dispatch({ type: 'PROGRESS', payload: { progress: res.data.progress } })
+                    setTimeout(() => {
+                        pingForProgress(0)
+                    }, 5000);
+                }
+            }).catch((err) => {
+                dispatch({ type: 'reset' })
+                console.log(err)
+            })
+        }
+    }, [])
+
     return <div style={{ minHeight: "45vh", position: "relative", paddingBottom: "3rem" }}>
         <div style={{ textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}>
             {state.loading && (state.progress > 0 ?
-                <ProgressBar now={state.progress} animated style={{ minWidth: "200px" }} /> :
-                <Spinner animation="grow" variant="danger" />)}
+                <ProgressBar variant="info" now={state.progress} animated style={{ minWidth: "200px" }} /> :
+                <Spinner animation="grow" variant="info" />)}
             {state.loading && (state.queue > 0 &&
                 <h6 className="text-muted" style={{ marginTop: "1rem" }}>Wait Time...{state.queue * 30}s</h6>
             )}
