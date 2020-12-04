@@ -1,4 +1,15 @@
 
+const popularTags=['Adventure',
+ 'Drama',
+ 'School',
+ 'Sci-Fi',
+ 'Romance',
+ 'Shounen',
+ 'Fantasy',
+ 'Comedy',
+ 'Comedy',
+ 'Action']
+
 const tags =['Action',
  'Adventure',
  'Cars',
@@ -39,4 +50,5 @@ const tags =['Action',
  'Supernatural',
  'Thriller',
  'Vampire']
- export default tags
+ exports.tags = tags
+ exports.popularTags = popularTags

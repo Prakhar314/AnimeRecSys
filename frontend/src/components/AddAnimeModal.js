@@ -13,7 +13,7 @@ function AddAnimeModal({ show, handleClose }) {
     const { state: globalState, dispatch: globalDispatch } = useContext(store)
 
     function handleAdd(item) {
-        globalDispatch({ type: actionTypes.ADD_ANIME, payload: {...item} })
+        globalDispatch({ type: actionTypes.ADD_ANIME, payload: { ...item } })
     }
 
     const [state, setState] = useState({
@@ -71,11 +71,17 @@ function AddAnimeModal({ show, handleClose }) {
         })
     }
 
+    const clearInput = () => {
+        setState(prevstate => {
+            return { ...prevstate, value: '' ,loading:false}
+        })
+    }
+
     const debouncedLoadSuggestions = useCallback(debounce(loadSuggestions, 1000), [])
 
     const searchInGlobal = globalState.userAnimeList.filter((i) => i.id === state.currentAnime.id)
     const animeAlreadyRated = searchInGlobal.length !== 0 && (state.currentAnime.score == null || state.currentAnime.score === searchInGlobal[0].score)
-    
+
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton>
@@ -85,11 +91,6 @@ function AddAnimeModal({ show, handleClose }) {
                 <Row style={{ minHeight: "300px" }}>
                     <Col style={{ backgroundColor: "lightgray", paddingTop: "1rem" }}>
                         <InputGroup size="sm">
-                            <InputGroup.Prepend>
-                                <InputGroup.Text id="basic-addon3">
-                                    Search
-                                </InputGroup.Text>
-                            </InputGroup.Prepend>
                             <FormControl
                                 placeholder="Jojo"
                                 aria-label="Search..."
@@ -97,6 +98,9 @@ function AddAnimeModal({ show, handleClose }) {
                                 onChange={onChange}
                                 value={state.value}
                             />
+                            <InputGroup.Append>
+                                <Button variant="outline-secondary" onClick={() => clearInput()}> X </Button>
+                            </InputGroup.Append>
                         </InputGroup>
                         {state.loading &&
                             <div style={{ display: "flex", height: "80%" }}>
@@ -150,7 +154,7 @@ function AddAnimeModal({ show, handleClose }) {
                     Close
                 </Button>
                 <Button variant="primary" size="sm" onClick={() => handleAdd(state.currentAnime)} disabled={state.currentAnime.score == null || animeAlreadyRated}>
-                    {animeAlreadyRated ? `Rated ${searchInGlobal[0].score}`:'Save Rating' }
+                    {animeAlreadyRated ? `Rated ${searchInGlobal[0].score}` : 'Save Rating'}
                 </Button>
             </Modal.Footer>
         </Modal>
