@@ -128,7 +128,7 @@ function AddAnimeModal({ show, handleClose }) {
                         {!state.currentAnime.image_path && <CenterDiv><h3 style={{ fontWeight: 200 }}>Nothing Selected</h3></CenterDiv>}
                         {state.currentAnime.image_path &&
                             <>
-                                <img src={state.currentAnime.image_path} style={{ width: "80%" }} />
+                                <img src={state.currentAnime.image_path} alt={state.currentAnime.title} style={{ width: "80%" }} />
                                 <h3 style={{ marginTop: "1rem" }}>{state.currentAnime.title}</h3>
                                 <ReactStars
                                     classNames="mx-auto"
@@ -146,10 +146,10 @@ function AddAnimeModal({ show, handleClose }) {
                 </Row>
             </Modal.Body>
             <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="secondary" size="sm" onClick={handleClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={() => handleAdd(state.currentAnime)} disabled={state.currentAnime.score == null || animeAlreadyRated}>
+                <Button variant="primary" size="sm" onClick={() => handleAdd(state.currentAnime)} disabled={state.currentAnime.score == null || animeAlreadyRated}>
                     {animeAlreadyRated ? `Rated ${searchInGlobal[0].score}`:'Save Rating' }
                 </Button>
             </Modal.Footer>

@@ -1,20 +1,26 @@
-import React, { useState , useContext} from 'react'
+import React, { useState, useContext } from 'react'
 
 import ScrollMenu from 'react-horizontal-scrolling-menu'
 import { Container, Button } from 'react-bootstrap'
+import debounce from 'lodash.debounce'
 
 import { store, actionTypes } from '../store'
 import OverlayedImage from './OverlayedImage'
+import EditAnimeModal from './EditAnimeModal'
 
 function UserAnimeList({ onAddAnime }) {
 
-    const {state,dispatch} = useContext(store)
+    const { state, dispatch } = useContext(store)
 
-    const onClearAnime=()=>{
-        dispatch({type:actionTypes.CLEAR})
+    const onClearAnime = () => {
+        dispatch({ type: actionTypes.CLEAR })
     }
 
-    const [selected, setSelected] = useState(0)
+    const [selected, setSelected] = useState({
+        key: 0,
+        showModal: false
+    })
+
     return (
         <div style={{ minHeight: "45vh", backgroundColor: "lightgrey", paddingTop: "1rem" }}>
             <Container style={{ display: "flex" }}>
@@ -38,9 +44,8 @@ function UserAnimeList({ onAddAnime }) {
             </Container>
             <Container>
                 <ScrollMenu
-                    arrowLeft={<div style={{ fontSize: "30px",margin:"1rem",fontWeight:700 }}>{" < "}</div>}
-                    arrowRight={<div style={{ fontSize: "30px",margin:"1rem",fontWeight:700 }}>{" > "}</div>}
-                    // onFirstItemVisible={()=>{console.log("AAAAA")}}
+                    arrowLeft={<div style={{ fontSize: "30px", margin: "1rem", fontWeight: 700}}>{" < "}</div>}
+                    arrowRight={<div style={{ fontSize: "30px", margin: "1rem", fontWeight: 700}}>{" > "}</div>}
                     arrowDisabledClass={"d-none"}
                     hideSingleArrow={true}
                     data={
@@ -53,10 +58,15 @@ function UserAnimeList({ onAddAnime }) {
                         ))
 
                     }
-                    selected={selected}
-                    onSelect={(key) => setSelected(key)}
+                    selected={selected.key}
+                    onSelect={(key) => {
+                        setSelected({ key: key, showModal: true })
+                    }}
                 />
             </Container>
+            {selected.showModal &&
+                <EditAnimeModal anime={{ ...state.userAnimeList[selected.key] }} show={selected.showModal} handleClose={() => setSelected(prevState => { return { ...prevState, showModal: false } })} />
+            }
         </div>
     )
 }

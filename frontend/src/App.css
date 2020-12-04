@@ -85,3 +85,17 @@ a, :active, :hover{
     border-color: #343a40!important;
     color:#fff!important;
 }
+#edit-anime-modal{
+    margin-left: auto;
+    margin-right: auto;
+    width: 300px;
+}
+
+.scroll-menu-arrow.d-none{
+    display:block!important;
+    opacity:0;
+}
+.horizontal-menu{
+    margin-left:-1.5rem;
+    margin-right:-1.5rem;
+}

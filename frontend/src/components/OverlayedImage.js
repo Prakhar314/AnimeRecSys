@@ -2,7 +2,7 @@ import React from 'react'
 import { Card } from 'react-bootstrap'
 function OverlayedImage({ id, title, image, score }) {
     return (
-        <Card style={{ border: "none", margin: "0.5rem", backgroundColor: "transparent" }}>
+        <Card style={{ border: "none", margin: "0.5rem", backgroundColor: "transparent", cursor:"pointer" }}>
 
             <Card.Img variant="top" src={image} style={{ objectFit: "cover", height: "30vh", borderRadius: "10px", display: "block" }} />
             <div style={{

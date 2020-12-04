@@ -1,22 +1,29 @@
 import {
     useParams
 } from "react-router-dom";
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo , useContext} from 'react'
 import axios from 'axios'
-import NavBar from "./NavBar"
 import { Col, Row, Container, Button } from 'react-bootstrap'
+
+import NavBar from "./NavBar"
+import { store } from '../store'
 import AnimeGrid from "./AnimeGrid"
 import AnimeInfo from "./AnimeInfo"
 import LoadingShar from "./LoadingShar"
+import EditAnimeModal from "./EditAnimeModal"
 
 export default function AnimePage() {
     // We can use the `useParams` hook here to access
     // the dynamic pieces of the URL.
     const defaultImages = useMemo(()=>{return{ cover: '/coverPlaceholder.png', banner: '/bannerPlaceholder.png' }},[])
-    let { id } = useParams();
+    const { id } = useParams();
     const [anime, setAnime] = useState({})
     const [images, setImages] = useState(defaultImages)
     const [width, setWidth] = React.useState(window.innerWidth)
+    const [showAnimeModal, setShowAnimeModal] = useState(false)
+    const {state:globalState } = useContext(store)
+
+    const userScore = (globalState.userAnimeList.filter((x)=>x.id===id)[0]||{score:null}).score
 
     React.useEffect(() => {
         const handleWindowResize = () => setWidth(window.innerWidth)
@@ -73,7 +80,9 @@ export default function AnimePage() {
                                 <h2 style={{ marginTop: "2rem", marginBottom: "1rem", textAlign: width > 768 ? "left" : "center" }}>{anime.details.title}</h2>
                                 <p>{anime.details.synopsis}</p>
                                 <div className="text-center text-sm-left">
-                                    <Button variant="outline-dark m-1">Rate this Anime</Button>
+                                    <Button variant="outline-dark m-1" onClick={()=>setShowAnimeModal(true)}>
+                                        {userScore!=null?`Rated ${userScore}`:'Rate this Anime'}
+                                    </Button>
                                     <a rel="noreferrer" target="_blank" href={`https://www.myanimelist.net/anime/${id}`} className="btn btn-outline-dark m-1">Open in MyAnimeList</a>
                                 </div>
                             </Col>
@@ -82,6 +91,7 @@ export default function AnimePage() {
                     <AnimeGrid anime={anime.recommendations}>
                         <h3 style={{ marginTop: "2rem", marginBottom: "1rem", textAlign: width > 768 ? "left" : "center" }}>Recommendations</h3>
                     </AnimeGrid>
+                    <EditAnimeModal anime={{id:anime.details.id,title:anime.details.title,image_path:images.cover}} handleClose={()=>setShowAnimeModal(false)} show={showAnimeModal} title={"Add Rating"}/>
                 </div>}
             {anime.details == null && <LoadingShar />}
         </>
