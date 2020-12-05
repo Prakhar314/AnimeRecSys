@@ -7,6 +7,7 @@ const initialState = {
 };
 
 const actionTypes = Object.freeze({
+    IMPORT: Symbol('IMPORT'),
     ADD_ANIME: Symbol('ADD_ANIME'),
     REMOVE_ANIME: Symbol('REMOVE_ANIME'),
     CLEAR: Symbol('CLEAR'),
@@ -25,7 +26,11 @@ const StateProvider = ({ children }) => {
                     recsInSync: false,
                     userAnimeList: [action.payload, ...state.userAnimeList.filter((item) => item.id !== action.payload.id)]
                 }
-
+            case actionTypes.IMPORT:
+                return {
+                    recsInSync: false,
+                    userAnimeList: action.payload
+                }
             case actionTypes.REMOVE_ANIME:
                 return {
                     recsInSync: false,

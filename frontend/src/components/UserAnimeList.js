@@ -6,6 +6,7 @@ import { Container, Button } from 'react-bootstrap'
 import { store, actionTypes } from '../store'
 import OverlayedImage from './OverlayedImage'
 import EditAnimeModal from './EditAnimeModal'
+import ImportAnimeModal from './ImportAnimeModal'
 import useWindowSize from './UseWindowSize'
 
 function ListEditButtons({ text, style, onClick, width }) {
@@ -24,6 +25,7 @@ function UserAnimeList({ onAddAnime }) {
 
     const { state, dispatch } = useContext(store)
     const { width } = useWindowSize()
+    const [showImportModal, setShowImportModal] = useState(false)
 
     const onClearAnime = () => {
         dispatch({ type: actionTypes.CLEAR })
@@ -42,7 +44,8 @@ function UserAnimeList({ onAddAnime }) {
                 </h3>
                 <div style={{ marginLeft: "auto" }}>
                     <ListEditButtons style={{ marginRight: "5px" }} text="Add Anime" onClick={onAddAnime} width={width} />
-                    <ListEditButtons style={{ marginLeft: "5px" }} text="Clear All" onClick={onClearAnime} width={width} />
+                    {state.userAnimeList.length===0?<ListEditButtons style={{ marginRight: "5px" }} text="Import Anime" onClick={()=>setShowImportModal(true)} width={width} />:
+                    <ListEditButtons style={{ marginLeft: "5px" }} text="Clear All" onClick={onClearAnime} width={width} />}
                 </div>
             </Container>
             <Container>
@@ -70,6 +73,7 @@ function UserAnimeList({ onAddAnime }) {
             {selected.showModal &&
                 <EditAnimeModal anime={{ ...state.userAnimeList[selected.key] }} show={selected.showModal} handleClose={() => setSelected(prevState => { return { ...prevState, showModal: false } })} />
             }
+            <ImportAnimeModal show={showImportModal} handleClose={()=>setShowImportModal(false)}/>
         </div>
     )
 }

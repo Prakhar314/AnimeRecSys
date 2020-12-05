@@ -94,7 +94,7 @@ function UserRecs() {
         }
         axios.get('https://animerecsys.glitch.me/job/',
             { withCredentials: true }).then((res) => {
-                if (res.data.status === 'failed') {
+                if (res.data.state === 'failed' || res.data.reason) {
                     dispatch({ type: 'ERROR', payload: { error: 'Failed' } })
                     return
                 }
@@ -118,7 +118,7 @@ function UserRecs() {
             axios.get('https://animerecsys.glitch.me/job/', {
                 withCredentials: true,
             }).then((res) => {
-                if (res.data.status === 'failed') {
+                if (res.data.state === 'failed') {
                     dispatch({ type: 'reset' })
                     return
                 }
