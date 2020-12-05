@@ -19,7 +19,7 @@ function getMPAA(mpaa) {
 }
 
 function getGenre(genre) {
-    return (<>{genre.split(",").map((g) => <Chip text={g} color="#e1e3e3" />)}</>)
+    return (<>{genre.split(",").map((g,i) => <Chip key={i} text={g} color="#e1e3e3" />)}</>)
 }
 
 function AnimeInfo({ mpaa_rating, score, genre }) {

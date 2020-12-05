@@ -29,7 +29,7 @@ function AddAnimeModal({ show, handleClose }) {
     }, [state.value])
 
     const loadSuggestions = (query) => {
-        console.log("fetching " + query)
+        // console.log("fetching " + query)
         setState(prevstate => {
             return { ...prevstate, loading: true }
         })
@@ -40,7 +40,7 @@ function AddAnimeModal({ show, handleClose }) {
                 "Content-Type": "application/json"
             }
         }).then((res) => {
-            console.log("fetching " + query + " " + valueRef.current)
+            // console.log("fetching " + query + " " + valueRef.current)
             if (query === valueRef.current) {
                 setState(prevstate => {
                     return { ...prevstate, loading: false, suggestion: res.data }
@@ -99,7 +99,7 @@ function AddAnimeModal({ show, handleClose }) {
                                 value={state.value}
                             />
                             <InputGroup.Append>
-                                <Button variant="outline-secondary" onClick={() => clearInput()}> <i class="fa fa-close"></i> </Button>
+                                <Button variant="outline-secondary" onClick={() => clearInput()}> <i className="fa fa-close"></i> </Button>
                             </InputGroup.Append>
                         </InputGroup>
                         {state.loading &&

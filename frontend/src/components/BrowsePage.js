@@ -15,7 +15,7 @@ function BrowsePage() {
                 // console.log(res.data)
                 setAnime(res.data)
             }).catch(err => {
-                console.log(err.code)
+                // console.log(err.code)
                 if (err.message.includes('timeout')) {
                     setTimeout(pingServer, 1000)
                 }

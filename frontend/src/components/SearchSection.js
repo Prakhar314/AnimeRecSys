@@ -17,9 +17,9 @@ export default function SearchSection({ onSuggest }) {
         valueRef.current = value
     }, [value])
     const loadSuggestions = (query) => {
-        console.log("fetching " + query)
-        console.log(incTags)
-        console.log(excTags)
+        // console.log("fetching " + query)
+        // console.log(incTags)
+        // console.log(excTags)
         setLoading(true)
         axios({
             method: 'post',
@@ -32,7 +32,7 @@ export default function SearchSection({ onSuggest }) {
                 "Content-Type": "application/json"
             }
         }).then((res) => {
-            console.log("fetching " + query + " " + valueRef.current)
+            // console.log("fetching " + query + " " + valueRef.current)
             if (query === valueRef.current) {
                 setLoading(false)
                 onSuggest(res.data)
@@ -53,7 +53,7 @@ export default function SearchSection({ onSuggest }) {
     }
 
     const changeTags = (i, k) => {
-        console.log(incTags)
+        // console.log(incTags)
         const tagStore = (expandTags ? tags : popularTags)
         if (k === 0) {
             const list = excTags.filter((item) => item !== tagStore[i])
@@ -90,7 +90,7 @@ export default function SearchSection({ onSuggest }) {
                         value={value}
                     />
                     <InputGroup.Append>
-                        <Button variant="outline-secondary" onClick={() => clearInput()}> <i class="fa fa-close"></i> </Button>
+                        <Button variant="outline-secondary" onClick={() => clearInput()}> <i className="fa fa-close"></i> </Button>
                     </InputGroup.Append>
                 </InputGroup>
                 {loading && <Spinner style={{ marginLeft: "1rem" }} animation="grow" />}

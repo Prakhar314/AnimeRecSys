@@ -18,7 +18,7 @@ function HomePage() {
                 </Button>
             </div>
 
-            <img src={process.env.PUBLIC_URL+"/AttackOnJojo.gif"} style={{ position: "absolute", zIndex: "-1", width: "100vw", height: "100vh", objectFit: "cover" }} />
+            <img alt="AOJ" src={process.env.PUBLIC_URL+"/AttackOnJojo.gif"} style={{ position: "absolute", zIndex: "-1", width: "100vw", height: "100vh", objectFit: "cover" }} />
 
             <div className="brand" style={{ color: "lightgray", margin: "auto", position: "absolute", top: "28%", left: "50%", transform: "translate(-50%, 0%)", textAlign: "center" }}>
                 <h1 style={{ fontSize: "min(13vw,100px)" }}>AnimeRecSys</h1>

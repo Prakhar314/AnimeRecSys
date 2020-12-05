@@ -47,12 +47,12 @@ const StateProvider = ({ children }) => {
     }, initialState);
 
     useEffect(() => {
-        console.log('setting a ' + JSON.stringify(state.userAnimeList))
+        // console.log('setting a ' + JSON.stringify(state.userAnimeList))
         localStorage.setItem('userAnimeList', JSON.stringify(state.userAnimeList))
     }, [state.userAnimeList])
 
     useEffect(() => {
-        console.log('setting b ' + JSON.stringify(state.recsInSync))
+        // console.log('setting b ' + JSON.stringify(state.recsInSync))
         localStorage.setItem('recsInSync', JSON.stringify(state.recsInSync))
     }, [state.recsInSync])
 

@@ -25,7 +25,7 @@ function AnimeGrid({ anime, children, fluid }) {
     }
 
     useEffect(() => {
-        if(currentPage>numPages && numPages!=0){
+        if(currentPage>numPages && numPages!==0){
             setCurrentPage(numPages)
         }
     }, [itemsPerPage])
@@ -44,10 +44,10 @@ function AnimeGrid({ anime, children, fluid }) {
             </Row>
             <div style={{ display: "flex" }}>
                 <Pagination className="mx-auto">
-                    <Pagination.Prev onClick={() => setCurrentPage(x => x - 1)} disabled={currentPage == 1} />
+                    <Pagination.Prev onClick={() => setCurrentPage(x => x - 1)} disabled={currentPage === 1} />
                     {[...Array(numPages).keys()].map((i) =>
                         <Pagination.Item key={i + 1} active={currentPage === i + 1} onClick={() => setCurrentPage(i + 1)}>{i + 1}</Pagination.Item>)}
-                    <Pagination.Next onClick={() => setCurrentPage(x => x + 1)} disabled={currentPage == numPages} />
+                    <Pagination.Next onClick={() => setCurrentPage(x => x + 1)} disabled={currentPage === numPages} />
                 </Pagination>
             </div>
         </Container>
