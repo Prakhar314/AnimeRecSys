@@ -3,7 +3,7 @@ import Chip from './Chip'
 
 function getColor(value) {
     if (value === 0 || value === 2) {
-        return "lightgrey"
+        return "rgb(255 255 255 / 68%)"
     }
     if (value === 1) {
         return "springgreen"
@@ -21,14 +21,15 @@ function ColoredSwitch({ text, onTap }) {
             setSelected(s => s + 1)
         }
         else {
-            setSelected(s => 0)
+            setSelected(0)
             newVal=0
         }
         onTap(newVal)
     }
     return (
-        <span onClick={switchValue}>
-            <Chip color={getColor(selected)} text={text} /></span>
+        <span onClick={switchValue} style={{cursor:"pointer"}}>
+            <Chip color={getColor(selected)} text={text}/>
+        </span>
     )
 }
 

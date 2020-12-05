@@ -36,7 +36,7 @@ function BrowsePage() {
                     <Container>
                         <h3 style={{ marginBottom: "2rem" }}>{suggestions.length === 0 ? "Popular Shows" : "Search Results"}</h3>
                     </Container></>}
-            {suggestions.length === 0 && <AnimeGrid anime={anime} />}
+            {suggestions.length === 0 && anime.length !== 0 && <AnimeGrid anime={anime} />}
             {suggestions.length !== 0 && <AnimeGrid anime={suggestions} />}
         </>
     )

@@ -4,7 +4,7 @@ import AnimeCard from "./AnimeCard"
 import useWindowSize from "./UseWindowSize"
 
 function AnimeGrid({ anime, children, fluid }) {
-    const { width, height } = useWindowSize()
+    const { width } = useWindowSize()
 
     const [currentPage, setCurrentPage] = useState(1)
     // xs

@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom'
 function NavBar() {
     return (
         <Navbar collapseOnSelect expand="md" bg="dark" variant="dark">
-            <Navbar.Brand href="/">AnimeRecSys</Navbar.Brand>
+            <Navbar.Brand href="#/">AnimeRecSys</Navbar.Brand>
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
                 <Nav className="ml-auto">

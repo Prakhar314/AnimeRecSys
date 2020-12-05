@@ -50,5 +50,4 @@ const tags =['Action',
  'Supernatural',
  'Thriller',
  'Vampire']
- exports.tags = tags
- exports.popularTags = popularTags
+export { tags,popularTags }

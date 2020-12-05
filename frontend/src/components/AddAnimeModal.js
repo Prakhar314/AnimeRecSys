@@ -73,7 +73,7 @@ function AddAnimeModal({ show, handleClose }) {
 
     const clearInput = () => {
         setState(prevstate => {
-            return { ...prevstate, value: '' ,loading:false}
+            return { ...prevstate, value: '', loading: false }
         })
     }
 
@@ -89,17 +89,17 @@ function AddAnimeModal({ show, handleClose }) {
             </Modal.Header>
             <Modal.Body style={{ paddingLeft: "1rem", paddingRight: "1rem", paddingBottom: "0px", paddingTop: "0px" }}>
                 <Row style={{ minHeight: "300px" }}>
-                    <Col style={{ backgroundColor: "lightgray", paddingTop: "1rem" }}>
+                    <Col style={{ background: "linear-gradient(180deg, rgba(230,250,255,1) 0%, rgba(187,226,255,1) 100%)", paddingTop: "1rem" }}>
                         <InputGroup size="sm">
                             <FormControl
-                                placeholder="Jojo"
+                                placeholder="Search"
                                 aria-label="Search..."
                                 aria-describedby="basic-addon2"
                                 onChange={onChange}
                                 value={state.value}
                             />
                             <InputGroup.Append>
-                                <Button variant="outline-secondary" onClick={() => clearInput()}> X </Button>
+                                <Button variant="outline-secondary" onClick={() => clearInput()}> <i class="fa fa-close"></i> </Button>
                             </InputGroup.Append>
                         </InputGroup>
                         {state.loading &&

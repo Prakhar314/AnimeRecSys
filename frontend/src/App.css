@@ -97,9 +97,16 @@ a, :active, :hover{
     display:block!important;
     opacity:0;
 }
+
 .horizontal-menu{
     margin-left:-1.5rem;
     margin-right:-1.5rem;
+}
+@media only screen and (max-width: 600px) {
+    .horizontal-menu{
+        margin-left:0rem;
+        margin-right:0rem;
+    }
 }
 .inline-link{
     font-weight: 600;
@@ -109,4 +116,23 @@ a, :active, :hover{
     font-weight: default;
     color: black;
     background-color:#ffffffab;
+}
+.gradient-section{
+    background: linear-gradient(210deg, rgba(228,242,255,1) 0%, rgba(173,202,224,1) 100%);
+}
+
+.input-group .form-control{
+    background-color: #ffffff54;
+    box-shadow: 0 1px 10px -10px black;
+}
+.input-group .btn{
+    background-color: #ffffff54;
+    box-shadow: 0 1px 15px -15px black;
+    border-color: lightgray;
+}
+.input-group .btn:hover{
+    color:gray;
+}
+.modal-body{
+    background-color: #00ced114;
 }

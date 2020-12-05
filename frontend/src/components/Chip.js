@@ -18,8 +18,9 @@ function Chip({ text, tooltip, color }) {
             lineHeight: "30px",
             borderRadius: "25px",
             backgroundColor: color || "#F1F35B",
-            color:"rgba(20,20,20,0.25)",
-            fontWeight:"700"
+            boxShadow: "0px 2px 10px -10px black",
+            color: "rgba(20,20,20,0.25)",
+            fontWeight: "700"
         }}>
         {text}
     </span>)

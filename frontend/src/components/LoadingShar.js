@@ -8,7 +8,7 @@ function LoadingShar({height}) {
             height: `${height||50}vh`,
             padding: "calc(25% - 50px)"
         }}>
-            <img src="/sharingan.gif" alt="Loading" style={{borderRadius:"100%"}}></img>
+            <img src={process.env.PUBLIC_URL+"/sharingan.gif"} alt="Loading" style={{borderRadius:"100%"}}></img>
         </div>
     )
 }

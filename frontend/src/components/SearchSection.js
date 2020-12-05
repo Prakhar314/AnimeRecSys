@@ -2,8 +2,9 @@ import { React, useState, useCallback, useRef, useEffect } from 'react'
 import debounce from 'lodash.debounce'
 import axios from 'axios'
 import { Jumbotron, Container, Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
-import {tags,popularTags} from './tags'
+import { tags, popularTags } from './tags'
 import ColoredSwitch from './ColoredSwitch';
+
 
 export default function SearchSection({ onSuggest }) {
     const [loading, setLoading] = useState(false)
@@ -47,13 +48,13 @@ export default function SearchSection({ onSuggest }) {
         fetchSuggestions(event.target.value)
     };
 
-    const clearInput =()=>{
+    const clearInput = () => {
         setValue('')
     }
 
     const changeTags = (i, k) => {
         console.log(incTags)
-        const tagStore = (expandTags?tags:popularTags)
+        const tagStore = (expandTags ? tags : popularTags)
         if (k === 0) {
             const list = excTags.filter((item) => item !== tagStore[i])
             setExcTags(list)
@@ -78,26 +79,26 @@ export default function SearchSection({ onSuggest }) {
 
     return (
 
-        <Jumbotron style={{ minHeight: "40vh" }}>
+        <Jumbotron className="gradient-section" style={{ minHeight: "40vh" }}>
             <Container style={{ display: "flex", alignItems: "center", justifyContent: "center", }}>
                 <InputGroup size="lg" style={{ maxWidth: "400px" }}>
                     <FormControl
-                        placeholder="Jojo"
+                        placeholder="Search..."
                         aria-label="Search..."
                         aria-describedby="basic-addon2"
                         onChange={onChange}
                         value={value}
                     />
                     <InputGroup.Append>
-                        <Button variant="outline-secondary" onClick={()=>clearInput()}> X </Button>
+                        <Button variant="outline-secondary" onClick={() => clearInput()}> <i class="fa fa-close"></i> </Button>
                     </InputGroup.Append>
                 </InputGroup>
                 {loading && <Spinner style={{ marginLeft: "1rem" }} animation="grow" />}
             </Container>
             <Container style={{ width: "80%", display: "block", textAlign: "center" }}>
                 <h5 style={{ fontWeight: 700, color: "grey", marginTop: "1rem" }}>Tags</h5>
-                {(expandTags?tags:popularTags).map((item, i) => <ColoredSwitch text={item} key={i} onTap={(k) => changeTags(i, k)} />)}
-                <Button style={{display:"block",marginTop:"1rem",marginLeft:"auto",marginRight:"auto"}} variant="outline-dark" size="sm" onClick={()=>setExpandTags(x=>!x)}>{expandTags?"Less":"More"}</Button>
+                {(expandTags ? tags : popularTags).map((item, i) => <ColoredSwitch text={item} key={i} onTap={(k) => changeTags(i, k)} />)}
+                <Button style={{ display: "block", marginTop: "1rem", marginLeft: "auto", marginRight: "auto" }} variant="secondary" size="sm" onClick={() => setExpandTags(x => !x)}>{expandTags ? "Less" : "More"}</Button>
             </Container>
 
         </Jumbotron>

@@ -15,7 +15,7 @@ import EditAnimeModal from "./EditAnimeModal"
 export default function AnimePage() {
     // We can use the `useParams` hook here to access
     // the dynamic pieces of the URL.
-    const defaultImages = useMemo(()=>{return{ cover: '/coverPlaceholder.png', banner: '/bannerPlaceholder.png' }},[])
+    const defaultImages = useMemo(()=>{return{ cover: process.env.PUBLIC_URL+'/coverPlaceholder.png', banner: process.env.PUBLIC_URL+'/bannerPlaceholder.png' }},[])
     const { id } = useParams();
     const [anime, setAnime] = useState({})
     const [images, setImages] = useState(defaultImages)
@@ -91,7 +91,7 @@ export default function AnimePage() {
                     <AnimeGrid anime={anime.recommendations}>
                         <h3 style={{ marginTop: "2rem", marginBottom: "1rem", textAlign: width > 768 ? "left" : "center" }}>Recommendations</h3>
                     </AnimeGrid>
-                    <EditAnimeModal anime={{id:anime.details.id,title:anime.details.title,image_path:images.cover}} handleClose={()=>setShowAnimeModal(false)} show={showAnimeModal} title={"Add Rating"}/>
+                    <EditAnimeModal anime={{id:anime.details.id,title:anime.details.title,image_path:images.cover}} handleClose={()=>setShowAnimeModal(false)} show={showAnimeModal} editing={false}/>
                 </div>}
             {anime.details == null && <LoadingShar />}
         </>
