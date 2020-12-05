@@ -44,7 +44,7 @@ function UserAnimeList({ onAddAnime }) {
                 </h3>
                 <div style={{ marginLeft: "auto" }}>
                     <ListEditButtons style={{ marginRight: "5px" }} text="Add Anime" onClick={onAddAnime} width={width} />
-                    {state.userAnimeList.length===0?<ListEditButtons style={{ marginRight: "5px" }} text="Import Anime" onClick={()=>setShowImportModal(true)} width={width} />:
+                    {state.userAnimeList.length===0?<ListEditButtons style={{ marginRight: "5px" }} text="Import MAL" onClick={()=>setShowImportModal(true)} width={width} />:
                     <ListEditButtons style={{ marginLeft: "5px" }} text="Clear All" onClick={onClearAnime} width={width} />}
                 </div>
             </Container>

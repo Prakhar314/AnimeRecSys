@@ -1,4 +1,4 @@
-import React,{useState,useContext} from 'react'
+import React, { useState, useContext } from 'react'
 import { InputGroup, Modal, Button, FormControl, Spinner } from 'react-bootstrap'
 import axios from 'axios'
 
@@ -7,25 +7,34 @@ import { store, actionTypes } from '../store'
 function ImportAnimeModal({ show, handleClose }) {
 
     const { dispatch: globalDispatch } = useContext(store)
-    const [value, setValue] = useState('')
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState('')
+    const [state, setState] = useState({
+        loading: false,
+        error: '',
+        value: ''
+    })
 
     const onChange = (event) => {
-        setValue(event.target.value)
+        setState(prevState => ({
+            ...prevState, value: event.target.value
+        }))
     }
 
     const importAnime = () => {
-        setLoading(true)
-        axios.get(`https://animerecsys.glitch.me/import/${value}`).then((res) => {
+        setState(prevState => ({
+            ...prevState, loading: true, error: ''
+        }))
+        axios.get(`https://animerecsys.glitch.me/import/${state.value}`).then((res) => {
             // console.log(res.data)
-            setLoading(false)
+            setState(prevState => ({
+                ...prevState, loading: false, error: ''
+            }))
             globalDispatch({ type: actionTypes.IMPORT, payload: res.data })
             handleClose()
         }).catch((err) => {
             console.log(err)
-            setLoading(false)
-            setError(JSON.stringify(err))
+            setState(prevState => ({
+                ...prevState, loading: false, error: 'Couldn\'t fetch MAL'
+            }))
         })
     }
 
@@ -41,14 +50,14 @@ function ImportAnimeModal({ show, handleClose }) {
                         aria-label="MAL ID"
                         aria-describedby="basic-addon2"
                         onChange={onChange}
-                        value={value}
+                        value={state.value}
                     />
                     <InputGroup.Append>
                         <Button variant="outline-secondary" onClick={importAnime}> Import </Button>
                     </InputGroup.Append>
                 </InputGroup>
-                {loading && <Spinner variant="secondary" animation="grow" />}
-                <p className="text-error">{error}</p>
+                {state.loading && <Spinner variant="secondary" animation="grow" className="m-1"/>}
+                <p style={{color:"red"}}>{state.error}</p>
             </Modal.Body>
         </Modal>
     )
