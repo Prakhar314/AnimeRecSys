@@ -8,6 +8,7 @@ import OverlayedImage from './OverlayedImage'
 import EditAnimeModal from './EditAnimeModal'
 import ImportAnimeModal from './ImportAnimeModal'
 import useWindowSize from './UseWindowSize'
+// import CenterDiv from './CenterDiv'
 
 function ListEditButtons({ text, style, onClick, width }) {
     return (
@@ -44,36 +45,38 @@ function UserAnimeList({ onAddAnime }) {
                 </h3>
                 <div style={{ marginLeft: "auto" }}>
                     <ListEditButtons style={{ marginRight: "5px" }} text="Add Anime" onClick={onAddAnime} width={width} />
-                    {state.userAnimeList.length===0?<ListEditButtons style={{ marginRight: "5px" }} text="Import MAL" onClick={()=>setShowImportModal(true)} width={width} />:
-                    <ListEditButtons style={{ marginLeft: "5px" }} text="Clear All" onClick={onClearAnime} width={width} />}
+                    {state.userAnimeList.length === 0 ? <ListEditButtons style={{ marginRight: "5px" }} text="Import MAL" onClick={() => setShowImportModal(true)} width={width} /> :
+                        <ListEditButtons style={{ marginLeft: "5px" }} text="Clear All" onClick={onClearAnime} width={width} />}
                 </div>
             </Container>
             <Container>
-                <ScrollMenu
-                    arrowLeft={<div style={{ fontSize: "30px", marginRight: "1rem", fontWeight: 700 }}>{" < "}</div>}
-                    arrowRight={<div style={{ fontSize: "30px", marginLeft: "1rem", fontWeight: 700 }}>{" > "}</div>}
-                    arrowDisabledClass={"d-none"}
-                    hideSingleArrow={true}
-                    data={
-                        state.userAnimeList.map((a, i) => (
-                            <div key={i}
-                                className="menu-item"
-                                style={{ display: "grid", maxWidth: "21vh" }}>
-                                <OverlayedImage id={a.id} image={a.image_path} title={a.title} score={a.score} />
-                            </div>
-                        ))
+                {state.userAnimeList.length === 0 ?
+                    <h4 className="text-muted font-weight-light" style={{marginTop:"15%",textAlign:"center"}}>Import your ratings from MAL or add them manually</h4>
+                    : <ScrollMenu
+                        arrowLeft={<div style={{ fontSize: "30px", marginRight: "1rem", fontWeight: 700 }}>{" < "}</div>}
+                        arrowRight={<div style={{ fontSize: "30px", marginLeft: "1rem", fontWeight: 700 }}>{" > "}</div>}
+                        arrowDisabledClass={"d-none"}
+                        hideSingleArrow={true}
+                        data={
+                            state.userAnimeList.map((a, i) => (
+                                <div key={i}
+                                    className="menu-item"
+                                    style={{ display: "grid", maxWidth: "21vh" }}>
+                                    <OverlayedImage id={a.id} image={a.image_path} title={a.title} score={a.score} />
+                                </div>
+                            ))
 
-                    }
-                    selected={selected.key}
-                    onSelect={(key) => {
-                        setSelected({ key: key, showModal: true })
-                    }}
-                />
+                        }
+                        selected={selected.key}
+                        onSelect={(key) => {
+                            setSelected({ key: key, showModal: true })
+                        }}
+                    />}
             </Container>
             {selected.showModal &&
                 <EditAnimeModal anime={{ ...state.userAnimeList[selected.key] }} show={selected.showModal} handleClose={() => setSelected(prevState => { return { ...prevState, showModal: false } })} />
             }
-            <ImportAnimeModal show={showImportModal} handleClose={()=>setShowImportModal(false)}/>
+            <ImportAnimeModal show={showImportModal} handleClose={() => setShowImportModal(false)} />
         </div>
     )
 }

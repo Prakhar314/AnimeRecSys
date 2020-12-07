@@ -1,4 +1,4 @@
-import { React, useReducer, useContext, useEffect } from 'react'
+import { React, useReducer, useContext, useEffect, useState, useRef } from 'react'
 
 import { Container, Button, ProgressBar, Spinner } from 'react-bootstrap'
 import axios from 'axios'
@@ -59,6 +59,29 @@ function UserRecs() {
     const [state, dispatch] = useReducer(reducer, initialState)
     const { state: globalState, dispatch: globalDispatch } = useContext(store)
     const userAnimeList = globalState.userAnimeList
+    const [timer, setTimer] = useState(null)
+    const savedTimer = useRef(timer)
+    useEffect(() => {
+        savedTimer.current = timer
+    }, [timer])
+
+    const clearTimer = (reset) => {
+        console.log('CLEARED')
+        if (savedTimer.current != null) {
+            clearInterval(savedTimer.current)
+            if (reset != false) {
+                setTimer(null)
+            }
+        }
+    }
+
+    const startTimer = () => {
+        clearTimer({ reset: false })
+        console.log('SET')
+        setTimer(setInterval(() => {
+            pingForProgress()
+        }, 5000))
+    }
 
     function getRecs() {
         dispatch({ type: 'REQ_SENT', payload: {} })
@@ -76,39 +99,45 @@ function UserRecs() {
         }).then((res) => {
             dispatch({ type: 'REQ_SENT', payload: res.data })
             globalDispatch({ type: actionTypes.SYNC })
-            setTimeout(() => {
-                pingForProgress(0)
-            }, 5000)
+            startTimer()
         }).catch((err) => {
-            if (err.response.data.err === 'ACTIVE_JOB') {
-                pingForProgress(0)
-                return
+            try {
+                if (err.response.data.error === 'ACTIVE_JOB') {
+                    startTimer()
+                    return
+                }
+                dispatch({ type: 'ERROR', payload: { error: err.response.data.error } })
+            } catch (error) {
+                dispatch({ type: 'ERROR', payload: { error: "Server Error" } })
             }
-            dispatch({ type: 'ERROR', payload: { error: err.response.data.error } })
         })
     }
 
-    function pingForProgress(tries) {
-        if (tries > 30) {
-            dispatch({ type: 'ERROR', payload: { error: "Job didn't finish in time" } })
-        }
+    function pingForProgress() {
+        // if (tries > 30) {
+        //     dispatch({ type: 'ERROR', payload: { error: "Job didn't finish in time" } })
+        // }
         axios.get('https://animerecsys.glitch.me/job/',
             { withCredentials: true }).then((res) => {
                 if (res.data.state === 'failed' || res.data.reason) {
                     dispatch({ type: 'ERROR', payload: { error: 'Failed' } })
+                    clearTimer()
                     return
                 }
                 if (res.data.result != null) {
                     dispatch({ type: 'FINISH', payload: { result: res.data.result } })
+                    clearTimer()
                 }
                 else {
                     dispatch({ type: 'PROGRESS', payload: { progress: res.data.progress } })
-                    setTimeout(() => {
-                        pingForProgress(tries + 1)
-                    }, 5000);
                 }
             }).catch((err) => {
-                dispatch({ type: 'ERROR', payload: { error: err.response.data.error } })
+                clearTimer()
+                try {
+                    dispatch({ type: 'ERROR', payload: { error: err.response.data.error } })
+                } catch (error) {
+                    dispatch({ type: 'ERROR', payload: { error: "Server Error" } })
+                }
             })
     }
 
@@ -127,16 +156,18 @@ function UserRecs() {
                 }
                 else {
                     dispatch({ type: 'PROGRESS', payload: { progress: res.data.progress } })
-                    setTimeout(() => {
-                        pingForProgress(0)
-                    }, 5000);
+                    startTimer()
                 }
             }).catch((err) => {
                 dispatch({ type: 'reset' })
                 // console.log(err)
             })
         }
+        return () => {
+            clearInterval(savedTimer.current)
+        }
     }, [])
+
 
     return <div style={{ minHeight: "45vh", position: "relative", paddingBottom: "3rem" }}>
         <div style={{ textAlign: "center", position: "absolute", left: "50%", top: "50%", transform: "translate(-50% , -50%)" }}>
@@ -149,6 +180,9 @@ function UserRecs() {
             {state.error &&
                 <h6 className="text-danger">{state.errorMessage}</h6>
             }
+            {!state.error && !state.loading && state.recommendations.length === 0 &&
+                <h4 className="text-muted font-weight-light">When you are done with your list, click the button below.</h4>
+            }
         </div>
         {state.recommendations.length !== 0 &&
             <AnimeGrid anime={state.recommendations} style={{ margin: "3rem" }}>
@@ -157,8 +191,8 @@ function UserRecs() {
                 </Container>
             </AnimeGrid>}
         {!state.loading &&
-            <Button variant="outline-dark" onClick={getRecs} disabled={userAnimeList.length < 10} style={{ position: "absolute", left: "50%", transform: "translate(-50%,0)", bottom: "1rem" }}>
-                {userAnimeList.length < 10 ? "Add " + (10 - userAnimeList.length) + " more" : "Get Recommendations"}
+            <Button variant="outline-dark" onClick={getRecs} disabled={userAnimeList.length < 2} style={{ position: "absolute", left: "50%", transform: "translate(-50%,0)", bottom: "1rem" }}>
+                {userAnimeList.length < 2 ? "Add " + (2 - userAnimeList.length) + " more" : "Get Recommendations"}
             </Button>}
     </div>
 }

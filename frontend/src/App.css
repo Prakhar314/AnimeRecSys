@@ -111,6 +111,7 @@ a, :active, :hover{
 .inline-link{
     font-weight: 600;
     color: lightgray;
+    cursor:pointer;
 }
 .inline-link:hover{
     font-weight: default;
