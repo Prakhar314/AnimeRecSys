@@ -1,10 +1,10 @@
 import { React, useEffect, useState, useCallback } from 'react'
 import { Container } from 'react-bootstrap'
 import axios from 'axios'
-import AnimeGrid from './AnimeGrid';
-import LoadingShar from './LoadingShar';
+import AnimeGrid from '../SharedComponents/AnimeGrid';
+import LoadingShar from '../SharedComponents/LoadingShar';
 import SearchSection from './SearchSection';
-import NavBar from './NavBar';
+import NavBar from '../SharedComponents/NavBar';
 
 function BrowsePage() {
     const [anime, setAnime] = useState([])

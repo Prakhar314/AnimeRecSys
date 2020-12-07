@@ -3,11 +3,11 @@ import React, { useState, useContext } from 'react'
 import ScrollMenu from 'react-horizontal-scrolling-menu'
 import { Container, Button } from 'react-bootstrap'
 
-import { store, actionTypes } from '../store'
+import { store, actionTypes } from '../../store'
 import OverlayedImage from './OverlayedImage'
-import EditAnimeModal from './EditAnimeModal'
-import ImportAnimeModal from './ImportAnimeModal'
-import useWindowSize from './UseWindowSize'
+import EditAnimeModal from '../Modals/EditAnimeModal'
+import ImportAnimeModal from '../Modals/ImportAnimeModal'
+import useWindowSize from '../SharedComponents/UseWindowSize'
 // import CenterDiv from './CenterDiv'
 
 function ListEditButtons({ text, style, onClick, width }) {

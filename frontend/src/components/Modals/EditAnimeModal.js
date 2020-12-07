@@ -3,8 +3,8 @@ import React, { useContext } from 'react'
 import { Modal, Button } from 'react-bootstrap'
 import ReactStars from 'react-rating-stars-component'
 
-import { store, actionTypes } from '../store'
-import CenterDiv from './CenterDiv'
+import { store, actionTypes } from '../../store'
+import CenterDiv from '../SharedComponents/CenterDiv'
 
 function EditAnimeModal({ anime, handleClose, show, editing }) {
 

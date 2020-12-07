@@ -4,11 +4,11 @@ import {
     Switch,
     Route
 } from "react-router-dom";
-import BrowsePage from "./components/BrowsePage";
+import BrowsePage from "./components/BrowsePage/BrowsePage";
 import HomePage from "./components/HomePage";
-import AnimePage from "./components/AnimePage";
-import RecPage from "./components/RecPage";
-import ScrollToTop from './components/ScrollToTop';
+import AnimePage from "./components/AnimePage/AnimePage";
+import RecPage from "./components/RecsPage/RecPage";
+import ScrollToTop from './components/SharedComponents/ScrollToTop';
 
 function App() {
     return (

@@ -3,8 +3,8 @@ import { React, useReducer, useContext, useEffect, useState, useRef } from 'reac
 import { Container, Button, ProgressBar, Spinner } from 'react-bootstrap'
 import axios from 'axios'
 
-import { store, actionTypes } from '../store'
-import AnimeGrid from './AnimeGrid'
+import { store, actionTypes } from '../../store'
+import AnimeGrid from '../SharedComponents/AnimeGrid'
 
 const initialState = {
     loading: false,
@@ -191,8 +191,8 @@ function UserRecs() {
                 </Container>
             </AnimeGrid>}
         {!state.loading &&
-            <Button variant="outline-dark" onClick={getRecs} disabled={userAnimeList.length < 2} style={{ position: "absolute", left: "50%", transform: "translate(-50%,0)", bottom: "1rem" }}>
-                {userAnimeList.length < 2 ? "Add " + (2 - userAnimeList.length) + " more" : "Get Recommendations"}
+            <Button variant="outline-dark" onClick={getRecs} disabled={userAnimeList.length < 5} style={{ position: "absolute", left: "50%", transform: "translate(-50%,0)", bottom: "1rem" }}>
+                {userAnimeList.length < 5 ? "Add " + (5 - userAnimeList.length) + " more" : "Get Recommendations"}
             </Button>}
     </div>
 }

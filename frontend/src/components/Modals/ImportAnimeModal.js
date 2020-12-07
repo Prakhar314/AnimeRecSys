@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react'
 import { InputGroup, Modal, Button, FormControl, Spinner } from 'react-bootstrap'
 import axios from 'axios'
 
-import { store, actionTypes } from '../store'
+import { store, actionTypes } from '../../store'
 
 function ImportAnimeModal({ show, handleClose }) {
 

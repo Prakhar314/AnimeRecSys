@@ -1,5 +1,5 @@
 import React from 'react'
-import Chip from "./Chip"
+import Chip from "../SharedComponents/Chip"
 
 function getMPAA(mpaa) {
     switch (mpaa) {

@@ -5,8 +5,8 @@ import debounce from 'lodash.debounce'
 import axios from 'axios'
 import ReactStars from "react-rating-stars-component"
 
-import { store, actionTypes } from '../store'
-import CenterDiv from './CenterDiv'
+import { store, actionTypes } from '../../store'
+import CenterDiv from '../SharedComponents/CenterDiv'
 
 function AddAnimeModal({ show, handleClose }) {
 

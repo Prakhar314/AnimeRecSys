@@ -5,12 +5,12 @@ import React, { useState, useEffect, useMemo , useContext} from 'react'
 import axios from 'axios'
 import { Col, Row, Container, Button } from 'react-bootstrap'
 
-import NavBar from "./NavBar"
-import { store } from '../store'
-import AnimeGrid from "./AnimeGrid"
+import NavBar from "../SharedComponents/NavBar"
+import { store } from '../../store'
+import AnimeGrid from "../SharedComponents/AnimeGrid"
 import AnimeInfo from "./AnimeInfo"
-import LoadingShar from "./LoadingShar"
-import EditAnimeModal from "./EditAnimeModal"
+import LoadingShar from "../SharedComponents/LoadingShar"
+import EditAnimeModal from "../Modals/EditAnimeModal"
 
 export default function AnimePage() {
     // We can use the `useParams` hook here to access

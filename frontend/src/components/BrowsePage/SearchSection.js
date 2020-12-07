@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce'
 import axios from 'axios'
 import { Jumbotron, Container, Spinner, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { tags, popularTags } from './tags'
-import ColoredSwitch from './ColoredSwitch';
+import ColoredSwitch from '../SharedComponents/ColoredSwitch';
 
 
 export default function SearchSection({ onSuggest }) {
