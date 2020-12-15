@@ -1,9 +1,10 @@
 @import url('https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css');
 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
 @import url('https://fonts.googleapis.com/css?family=Quicksand&display=swap');
-.App {
-  /* text-align: center; */
-}
+/* .App {
+  text-align: center; 
+}  */
+
 
 .App-logo {
   height: 40vmin;
@@ -136,4 +137,33 @@ a, :active, :hover{
 }
 .modal-body{
     background-color: #00ced114;
+}
+@keyframes slide-in-out {
+  0%   {
+  opacity:0;
+  left:-100%;
+  }
+  5%  {
+  opacity:1;
+  left:0;
+  }
+  95%  {
+  opacity:1;
+  left:0;
+  }
+  100% {
+  opacity:0;
+  left:-100%;
+  }
+}
+
+/* The element to apply the animation to */
+#hint-text {
+  position:absolute;
+  left:-100%;
+  /* background-color: red; */
+  animation-name: slide-in-out;
+  animation-duration: 10s;
+  text-align:left;
+  opacity:0;
 }

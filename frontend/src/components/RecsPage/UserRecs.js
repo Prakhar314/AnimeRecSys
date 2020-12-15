@@ -1,6 +1,6 @@
 import { React, useReducer, useContext, useEffect, useState, useRef } from 'react'
 
-import { Container, Button, ProgressBar, Spinner } from 'react-bootstrap'
+import { Container, Button, ProgressBar, Spinner, Collapse } from 'react-bootstrap'
 import axios from 'axios'
 
 import { store, actionTypes } from '../../store'
@@ -186,9 +186,13 @@ function UserRecs() {
         </div>
         {state.recommendations.length !== 0 &&
             <AnimeGrid anime={state.recommendations} style={{ margin: "3rem" }}>
-                <Container fluid>
-                    <h3 style={{ marginBottom: "2rem", marginTop: "2rem" }}>{"Recommended"}</h3>
-                </Container>
+                <div style={{ position:"relative"}}>
+                    <h3 style={{ marginBottom: "2rem", marginTop: "2rem",marginBottom:"3rem"}}>{"Recommended"}
+                        <div id="hint-text" className="text-muted" style={{fontSize:"15px"}}>
+                            Tip: Rate some of these shows to tune your recommendations!
+                        </div>
+                    </h3>
+                </div>
             </AnimeGrid>}
         {!state.loading &&
             <Button variant="outline-dark" onClick={getRecs} disabled={userAnimeList.length < 5} style={{ position: "absolute", left: "50%", transform: "translate(-50%,0)", bottom: "1rem" }}>
